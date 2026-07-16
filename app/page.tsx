@@ -54,7 +54,6 @@ export default function Home() {
         <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-royal-blue/70">
           <a href="#como-funciona" className="hover:text-royal-blue transition-colors">¿Cómo funciona?</a>
           <a href="#filosofia" className="hover:text-royal-blue transition-colors">Filosofía</a>
-          <a href="#preguntas" className="hover:text-royal-blue transition-colors">Preguntas</a>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -75,14 +74,23 @@ export default function Home() {
         
         {/* Social Icons Sidebar (Inspired by Image 2 vertical layout) */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/40 border-r border-royal-blue/10 py-8">
-          <a href="#" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit">
-            <span className="text-xs uppercase tracking-wider font-bold">Ig</span>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
           </a>
-          <a href="#" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit">
-            <span className="text-xs uppercase tracking-wider font-bold">Tw</span>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="Twitter / X">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+              <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+            </svg>
           </a>
-          <a href="#" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit">
-            <span className="text-xs uppercase tracking-wider font-bold">Tk</span>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="TikTok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+            </svg>
           </a>
         </div>
 
@@ -166,7 +174,7 @@ export default function Home() {
                     ¡Conexión establecida!
                   </h3>
                   <p className="text-sm text-foreground/70">
-                    Tu jardín compartido ha sido creado con éxito. ¡Listo para plantar la primera racha!
+                    El jardín de @EgoBMZ & Sharon ha sido creado con éxito. ¡Listo para plantar la primera racha!
                   </p>
                 </div>
                 <button
@@ -217,7 +225,7 @@ export default function Home() {
                     jardín de
                   </span>
                   <span className="font-doodle text-xl font-bold text-royal-blue mt-0.5 leading-none">
-                    sam & alec
+                    ego & sharon
                   </span>
                 </div>
                 {/* Streak counter (inspired by streaky app concept) */}
@@ -417,7 +425,7 @@ export default function Home() {
           </p>
 
           <span className="font-doodle text-2xl font-semibold text-royal-blue tracking-wide mt-4 block">
-            Sam & Alec ♡
+            Diego & Sharon ♡
           </span>
         </div>
       </section>
