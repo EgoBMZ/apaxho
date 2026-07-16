@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   InstagramIcon,
   TwitterIcon,
@@ -16,6 +17,22 @@ export default function Home() {
   const [generatedCode, setGeneratedCode] = useState("");
   const [isLinked, setIsLinked] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const fullText = "Más de 52,218 memorias plantadas";
+  const [typedText, setTypedText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    setTypedText("");
+    const interval = setInterval(() => {
+      setTypedText(fullText.slice(0, index + 1));
+      index++;
+      if (index >= fullText.length) {
+        clearInterval(interval);
+      }
+    }, 60);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleGenerateCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -82,7 +99,12 @@ export default function Home() {
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative">
         
         {/* Social Icons Sidebar (Inspired by Image 2 vertical layout) */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/40 border-r border-royal-blue/10 py-8">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/40 border-r border-royal-blue/10 py-8"
+        >
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="Instagram">
             <InstagramIcon className="w-6 h-6" />
           </a>
@@ -92,103 +114,149 @@ export default function Home() {
           <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="TikTok">
             <TikTokIcon className="w-6 h-6" />
           </a>
-        </div>
+        </motion.div>
 
         {/* Content Column */}
         <div className="lg:col-span-6 flex flex-col gap-8">
           {/* Memories Planted Badge (Inspired by Image 1) */}
-          <div className="inline-flex items-center gap-2 bg-lavender/40 text-lavender-text px-4 py-2 rounded-full w-fit text-sm font-bold border border-lavender/60">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 bg-lavender/40 text-lavender-text px-4 py-2 rounded-full w-fit text-sm font-bold border border-lavender/60 min-h-[38px]"
+          >
             <span className="animate-pulse">🌸</span>
-            <span>Más de 52,218 memorias plantadas</span>
-          </div>
+            <span className="font-mono">
+              {typedText}
+              {typedText.length < fullText.length && (
+                <span className="border-r-2 border-royal-blue/60 ml-0.5 animate-pulse">|</span>
+              )}
+            </span>
+          </motion.div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-royal-blue font-mono tracking-tight">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-royal-blue font-mono tracking-tight"
+          >
             Un apapacho diario para tu persona favorita.
-          </h1>
+          </motion.h1>
 
-          <p className="text-lg text-foreground/80 leading-relaxed max-w-xl">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-foreground/80 leading-relaxed max-w-xl"
+          >
             Cultiva un jardín digital de recuerdos compartiendo notas, recordatorios y pequeños momentos del día. Vincula tu espacio con tu pareja, bestie o amigo, mantén la racha activa y ve cómo florece tu diario compartido.
-          </p>
+          </motion.p>
 
           {/* Interactive Console / Coupling box (Inspired by user request details) */}
-          <div id="empezar" className="bg-white/80 backdrop-blur-md border-2 border-royal-blue/20 rounded-2xl p-6 shadow-xl shadow-royal-blue/5 flex flex-col gap-6 max-w-xl">
-            {!isLinked ? (
-              <>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-sm font-bold text-royal-blue uppercase tracking-wider">
-                    Paso 1: Conecta tu jardín
-                  </h3>
-                  <p className="text-sm text-foreground/70">
-                    Genera tu código o introduce el código de invitación de tu pareja/amigo para enlazarse.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Code Generator */}
-                  <div className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
-                    <button
-                      onClick={handleGenerateCode}
-                      className="w-full bg-white hover:bg-royal-blue/5 border border-royal-blue/20 text-royal-blue text-sm font-bold py-2 px-4 rounded-lg transition-all"
-                    >
-                      Generar código nuevo
-                    </button>
-                    {generatedCode && (
-                      <div className="flex items-center justify-between bg-white border border-royal-blue/10 rounded-lg p-2 mt-1">
-                        <span className="font-mono text-xs font-bold text-royal-blue tracking-widest">{generatedCode}</span>
-                        <button
-                          onClick={handleCopy}
-                          className="text-[10px] uppercase font-bold text-lavender-text hover:underline"
-                        >
-                          {copied ? "¡Copiado!" : "Copiar"}
-                        </button>
-                      </div>
-                    )}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.3 }}
+            id="empezar" 
+            className="bg-white/80 backdrop-blur-md border-2 border-royal-blue/20 rounded-2xl p-6 shadow-xl shadow-royal-blue/5 flex flex-col gap-6 max-w-xl overflow-hidden"
+          >
+            <AnimatePresence mode="wait">
+              {!isLinked ? (
+                <motion.div
+                  key="unlinked"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col gap-6"
+                >
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-sm font-bold text-royal-blue uppercase tracking-wider">
+                      Paso 1: Conecta tu jardín
+                    </h3>
+                    <p className="text-sm text-foreground/70">
+                      Genera tu código o introduce el código de invitación de tu pareja/amigo para enlazarse.
+                    </p>
                   </div>
 
-                  {/* Code Connector */}
-                  <form onSubmit={handleLink} className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
-                    <input
-                      type="text"
-                      placeholder="Código de pareja"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value.toUpperCase())}
-                      className="w-full bg-white border border-royal-blue/20 text-royal-blue placeholder-royal-blue/30 text-sm font-mono text-center font-bold py-2 px-4 rounded-lg outline-none focus:border-royal-blue"
-                    />
-                    <button
-                      type="submit"
-                      disabled={code.trim().length < 6}
-                      className="w-full bg-royal-blue hover:bg-royal-blue/90 disabled:opacity-50 text-white text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-md"
-                    >
-                      Vincular Jardín
-                    </button>
-                  </form>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-4 flex flex-col items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-lavender flex items-center justify-center text-2xl animate-bounce">
-                  🌸
-                </div>
-                <div className="flex flex-col gap-1">
-                  <h3 className="font-doodle text-xl font-bold text-royal-blue">
-                    ¡Conexión establecida!
-                  </h3>
-                  <p className="text-sm text-foreground/70">
-                    El jardín de @EgoBMZ & Sharon ha sido creado con éxito. ¡Listo para plantar la primera racha!
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    setIsLinked(false);
-                    setCode("");
-                  }}
-                  className="text-xs text-royal-blue/60 hover:text-royal-blue hover:underline"
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Code Generator */}
+                    <div className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
+                      <button
+                        onClick={handleGenerateCode}
+                        className="w-full bg-white hover:bg-royal-blue/5 border border-royal-blue/20 text-royal-blue text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-[0.98]"
+                      >
+                        Generar código nuevo
+                      </button>
+                      {generatedCode && (
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="flex items-center justify-between bg-white border border-royal-blue/10 rounded-lg p-2 mt-1"
+                        >
+                          <span className="font-mono text-xs font-bold text-royal-blue tracking-widest">{generatedCode}</span>
+                          <button
+                            onClick={handleCopy}
+                            className="text-[10px] uppercase font-bold text-lavender-text hover:underline"
+                          >
+                            {copied ? "¡Copiado!" : "Copiar"}
+                          </button>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Code Connector */}
+                    <form onSubmit={handleLink} className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
+                      <input
+                        type="text"
+                        placeholder="Código de pareja"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value.toUpperCase())}
+                        className="w-full bg-white border border-royal-blue/20 text-royal-blue placeholder-royal-blue/30 text-sm font-mono text-center font-bold py-2 px-4 rounded-lg outline-none focus:border-royal-blue"
+                      />
+                      <button
+                        type="submit"
+                        disabled={code.trim().length < 6}
+                        className="w-full bg-royal-blue hover:bg-royal-blue/90 disabled:opacity-50 text-white text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-md active:scale-[0.98]"
+                      >
+                        Vincular Jardín
+                      </button>
+                    </form>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="linked"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 120, damping: 12 }}
+                  className="text-center py-4 flex flex-col items-center gap-4"
                 >
-                  Volver a intentar
-                </button>
-              </div>
-            )}
-          </div>
+                  <div className="w-16 h-16 rounded-full bg-lavender flex items-center justify-center text-2xl animate-bounce">
+                    🌸
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="font-doodle text-xl font-bold text-royal-blue">
+                      ¡Conexión establecida!
+                    </h3>
+                    <p className="text-sm text-foreground/70">
+                      El jardín de @EgoBMZ & Sharon ha sido creado con éxito. ¡Listo para plantar la primera racha!
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setIsLinked(false);
+                      setCode("");
+                    }}
+                    className="text-xs text-royal-blue/60 hover:text-royal-blue hover:underline mt-2"
+                  >
+                    Volver a intentar
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
 
         {/* Mockup Column (Inspired by Image 2 phone mockup & Image 4 layout/doodles) */}
@@ -197,18 +265,37 @@ export default function Home() {
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-lavender/30 rounded-full blur-2xl -z-10" />
           <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-royal-blue/5 rounded-full blur-2xl -z-10" />
           
-          <div className="absolute top-8 -right-4 md:-right-12 text-royal-blue/20 -z-10 rotate-12">
+          <motion.div 
+            animate={{ y: [0, -12, 0], rotate: [12, 18, 12] }}
+            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+            className="absolute top-8 -right-4 md:-right-12 text-royal-blue/20 -z-10"
+          >
             <Sun2Icon size={56} />
-          </div>
-          <div className="absolute bottom-16 -left-6 md:-left-16 text-royal-blue/20 -z-10 -rotate-12">
+          </motion.div>
+          
+          <motion.div 
+            animate={{ y: [0, 10, 0], rotate: [-12, -7, -12] }}
+            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+            className="absolute bottom-16 -left-6 md:-left-16 text-royal-blue/20 -z-10"
+          >
             <CoffeeCup1Icon size={64} />
-          </div>
-          <div className="absolute -top-12 left-1/4 text-royal-blue/20 -z-10 rotate-45">
+          </motion.div>
+          
+          <motion.div 
+            animate={{ scale: [1, 1.12, 1], rotate: [45, 60, 45] }}
+            transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
+            className="absolute -top-12 left-1/4 text-royal-blue/20 -z-10"
+          >
             <StarIcon size={42} />
-          </div>
+          </motion.div>
 
           {/* Device Mockup */}
-          <div className="w-[310px] h-[620px] rounded-[50px] bg-slate-900 p-3.5 shadow-2xl border-4 border-slate-800/80 relative overflow-hidden flex flex-col justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: 50, rotate: 1 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 45, damping: 15, delay: 0.2 }}
+            className="w-[310px] h-[620px] rounded-[50px] bg-slate-900 p-3.5 shadow-2xl border-4 border-slate-800/80 relative overflow-hidden flex flex-col justify-between"
+          >
             {/* Dynamic Island */}
             <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-20 flex items-center justify-between px-4">
               <span className="w-1.5 h-1.5 bg-royal-blue rounded-full animate-pulse" />
@@ -253,15 +340,27 @@ export default function Home() {
               {/* The Doodle Garden (Inspired by Image 4 garden) */}
               <div className="flex-1 my-4 bg-white/50 border border-royal-blue/5 rounded-3xl p-4 relative overflow-hidden grid grid-cols-4 gap-4 items-center justify-items-center">
                 {/* Floating bees, flowers, mushrooms as SVGs in royal blue */}
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ rotate: [-2, 2, -2] }} 
+                  transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.15, rotate: 5 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer"
+                >
                   {/* Grass */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
                     <path d="M30,85 C28,60 15,45 10,40 C20,50 30,70 33,85" />
                     <path d="M45,85 C45,55 35,35 25,30 C38,40 45,65 48,85" />
                   </svg>
-                </div>
+                </motion.div>
                 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer col-span-2">
+                <motion.div 
+                  animate={{ rotate: [1, -2, 1], y: [0, -2, 0] }} 
+                  transition={{ repeat: Infinity, duration: 5.2, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.12, y: -4 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer col-span-2"
+                >
                   {/* Flower 1 */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-12 h-12">
                     <path d="M50,85 C51,70 49,55 50,45" />
@@ -272,9 +371,15 @@ export default function Home() {
                     <path d="M47,38 C39,42 37,32 44,35" />
                     <path d="M45,31 C40,24 48,20 50,28" />
                   </svg>
-                </div>
+                </motion.div>
 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ y: [0, -4, 0], x: [0, 2, 0] }} 
+                  transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.22, rotate: 10 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer"
+                >
                   {/* Bee */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
                     <ellipse cx="50" cy="50" rx="14" ry="9" />
@@ -282,9 +387,15 @@ export default function Home() {
                     <path d="M50,41 Q51,50 50,59" />
                     <path d="M45,41 Q38,25 50,41" />
                   </svg>
-                </div>
+                </motion.div>
 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ scale: [1, 1.05, 1] }} 
+                  transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.15, rotate: -6 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer"
+                >
                   {/* Mushroom */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
                     <path d="M30,55 C30,35 70,35 70,55 Z" />
@@ -292,9 +403,15 @@ export default function Home() {
                     <circle cx="45" cy="46" r="3" />
                     <circle cx="55" cy="49" r="2.5" />
                   </svg>
-                </div>
+                </motion.div>
 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ rotate: [-2, 1, -2], y: [0, -1, 0] }} 
+                  transition={{ repeat: Infinity, duration: 4.6, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.12, y: -3 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer col-span-1"
+                >
                   {/* Flower 2 */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9">
                     <path d="M50,85 C50,75 50,65 50,55" />
@@ -304,30 +421,46 @@ export default function Home() {
                     <path d="M50,53 C50,60 45,56 47,52" />
                     <path d="M45,45 C38,45 42,42 45,43" />
                   </svg>
-                </div>
+                </motion.div>
 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ rotate: [2, -2, 2] }} 
+                  transition={{ repeat: Infinity, duration: 4.1, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.15, rotate: -5 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer"
+                >
                   {/* Grass 2 */}
                   <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
                     <path d="M58,85 C60,50 70,30 80,25 C70,40 62,65 60,85" />
                     <path d="M72,85 C75,65 85,55 90,50 C82,60 76,75 74,85" />
                   </svg>
-                </div>
+                </motion.div>
 
-                <div className="hover:scale-110 active:scale-95 transition-transform duration-300 text-royal-blue cursor-pointer">
+                <motion.div 
+                  animate={{ y: [0, 4, 0], x: [0, -2, 0] }} 
+                  transition={{ repeat: Infinity, duration: 3.6, ease: "easeInOut" }}
+                  whileHover={{ scale: 1.22, rotate: -10 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="text-royal-blue cursor-pointer transform scale-x-[-1]"
+                >
                   {/* Bee 2 */}
-                  <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 transform scale-x-[-1]">
+                  <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
                     <ellipse cx="50" cy="50" rx="14" ry="9" />
                     <path d="M44,42 Q45,50 44,58" />
                     <path d="M50,41 Q51,50 50,59" />
                     <path d="M45,41 Q38,25 50,41" />
                   </svg>
-                </div>
+                </motion.div>
 
                 {/* Dotted "Add" circle at bottom center */}
-                <div className="col-span-4 mt-auto mb-2 w-12 h-12 rounded-full border-2 border-dashed border-royal-blue/30 hover:border-royal-blue/60 transition-colors flex items-center justify-center text-royal-blue/50 hover:text-royal-blue cursor-pointer">
+                <motion.div 
+                  whileHover={{ scale: 1.08, borderStyle: "solid", borderColor: "#1c0dcb" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="col-span-4 mt-auto mb-2 w-12 h-12 rounded-full border-2 border-dashed border-royal-blue/30 flex items-center justify-center text-royal-blue/50 hover:text-royal-blue cursor-pointer"
+                >
                   <span className="text-xl font-bold">+</span>
-                </div>
+                </motion.div>
               </div>
 
               {/* Bottom Nav Simulation */}
@@ -337,7 +470,7 @@ export default function Home() {
                 <span>Ajustes</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </main>
 
@@ -354,7 +487,14 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Card 1 */}
-          <div className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center text-center gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            whileHover={{ y: -6 }}
+            className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center gap-6"
+          >
             <div className="w-16 h-16 rounded-full bg-royal-blue/5 flex items-center justify-center text-royal-blue">
               {/* Linked loop SVG */}
               <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
@@ -369,10 +509,17 @@ export default function Home() {
                 Regístrate y vincula tu cuenta usando un código compartido. Un jardín único creado exclusivamente para ustedes dos.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2 */}
-          <div className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center text-center gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            whileHover={{ y: -6 }}
+            className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center gap-6"
+          >
             <div className="w-16 h-16 rounded-full bg-royal-blue/5 flex items-center justify-center text-royal-blue">
               {/* Pencil SVG */}
               <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
@@ -389,10 +536,17 @@ export default function Home() {
                 Escribe una nota recordando algo bonito del día, un detalle o un cumplido. Sin fotos perfectas, solo palabras reales.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 3 */}
-          <div className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center text-center gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            whileHover={{ y: -6 }}
+            className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center gap-6"
+          >
             <div className="w-16 h-16 rounded-full bg-royal-blue/5 flex items-center justify-center text-royal-blue">
               {/* Flower SVG */}
               <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
@@ -413,7 +567,7 @@ export default function Home() {
                 Cada nota exitosa planta una flor o detalle en su jardín virtual. Si pasa un día sin nota, la racha se romperá.
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
