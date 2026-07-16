@@ -1,7 +1,16 @@
 "use client";
 
 import { useState } from "react";
-
+import {
+  InstagramIcon,
+  TwitterIcon,
+  TikTokIcon,
+  StarIcon,
+  HeartEyesEmojiIcon,
+  CoffeeCup1Icon,
+  Sun2Icon,
+  FireIcon
+} from "react-doodle-icons";
 export default function Home() {
   const [code, setCode] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
@@ -75,22 +84,13 @@ export default function Home() {
         {/* Social Icons Sidebar (Inspired by Image 2 vertical layout) */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/40 border-r border-royal-blue/10 py-8">
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-            </svg>
+            <InstagramIcon className="w-6 h-6" />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="Twitter / X">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-              <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-              <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-            </svg>
+            <TwitterIcon className="w-6 h-6" />
           </a>
           <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors p-2 hover:bg-royal-blue/5 rounded-lg w-fit" title="TikTok">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-            </svg>
+            <TikTokIcon className="w-6 h-6" />
           </a>
         </div>
 
@@ -193,9 +193,19 @@ export default function Home() {
 
         {/* Mockup Column (Inspired by Image 2 phone mockup & Image 4 layout/doodles) */}
         <div className="lg:col-span-5 flex justify-center relative">
-          {/* Abstract background shapes */}
+          {/* Abstract background shapes and floating doodles */}
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-lavender/30 rounded-full blur-2xl -z-10" />
           <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-royal-blue/5 rounded-full blur-2xl -z-10" />
+          
+          <div className="absolute top-8 -right-4 md:-right-12 text-royal-blue/20 -z-10 rotate-12">
+            <Sun2Icon size={56} />
+          </div>
+          <div className="absolute bottom-16 -left-6 md:-left-16 text-royal-blue/20 -z-10 -rotate-12">
+            <CoffeeCup1Icon size={64} />
+          </div>
+          <div className="absolute -top-12 left-1/4 text-royal-blue/20 -z-10 rotate-45">
+            <StarIcon size={42} />
+          </div>
 
           {/* Device Mockup */}
           <div className="w-[310px] h-[620px] rounded-[50px] bg-slate-900 p-3.5 shadow-2xl border-4 border-slate-800/80 relative overflow-hidden flex flex-col justify-between">
@@ -221,18 +231,23 @@ export default function Home() {
               {/* Garden Header */}
               <div className="flex justify-between items-start mt-6 px-2">
                 <div className="flex flex-col">
-                  <span className="font-doodle text-lg font-bold text-royal-blue leading-tight">
-                    jardín de
+                  <span className="font-doodle text-xl font-bold text-royal-blue leading-tight">
+                    Ego & Sharon
                   </span>
                   <span className="font-doodle text-xl font-bold text-royal-blue mt-0.5 leading-none">
-                    ego & sharon
+                    memories
                   </span>
                 </div>
-                {/* Streak counter (inspired by streaky app concept) */}
-                <div className="flex items-center gap-1 bg-royal-blue/5 text-royal-blue border border-royal-blue/10 px-2 py-1 rounded-xl text-xs font-bold">
-                  <span>🔥</span>
-                  <span>14d</span>
-                </div>
+                {/* Hand-drawn flower logo as shown in reference 4 */}
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 text-royal-blue transform translate-y-[-2px]">
+                  <path d="M50,85 C51,70 49,55 50,45" />
+                  <circle cx="50" cy="35" r="8" />
+                  <path d="M50,27 C50,15 62,25 56,31" />
+                  <path d="M58,35 C70,30 65,45 57,39" />
+                  <path d="M54,41 C58,53 46,49 48,42" />
+                  <path d="M46,39 C34,45 30,30 42,35" />
+                  <path d="M44,31 C38,20 50,15 50,27" />
+                </svg>
               </div>
 
               {/* The Doodle Garden (Inspired by Image 4 garden) */}
@@ -317,7 +332,7 @@ export default function Home() {
 
               {/* Bottom Nav Simulation */}
               <div className="flex justify-around items-center border-t border-royal-blue/10 pt-3 pb-2 text-royal-blue/50 text-[10px] font-bold">
-                <span className="text-royal-blue underline decoration-2 underline-offset-4">Jardín</span>
+                <span className="text-royal-blue underline decoration-2 underline-offset-4">Memories</span>
                 <span>Diario</span>
                 <span>Ajustes</span>
               </div>
