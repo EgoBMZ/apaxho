@@ -10,13 +10,27 @@ import {
   GoogleAuthProvider, 
   FacebookAuthProvider 
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { translations } from "../translations";
 import { 
   HeartIcon, 
   StarIcon, 
   GlobeIcon 
 } from "react-doodle-icons";
+
+const generatePartnerCode = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "APX-";
+  for (let i = 0; i < 3; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  code += "-";
+  for (let i = 0; i < 3; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -58,7 +72,23 @@ export default function LoginPage() {
       const provider = providerName === "google" 
         ? new GoogleAuthProvider() 
         : new FacebookAuthProvider();
-      await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+
+      // Ensure user document exists in Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (!userDocSnap.exists()) {
+        const partnerCode = generatePartnerCode();
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          displayName: user.displayName || user.email?.split("@")[0] || "User",
+          email: user.email || "",
+          partnerCode: partnerCode,
+          partnerUid: ""
+        });
+      }
+
       router.push("/dashboard");
     } catch (err: any) {
       console.error(err);

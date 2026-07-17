@@ -28,6 +28,7 @@ export default function RootLayout({
     <html
       lang="es"
       className={`${spaceMono.variable} ${playpenSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
