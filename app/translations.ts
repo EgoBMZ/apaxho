@@ -47,7 +47,25 @@ export const translations = {
     // Simulated mobile app navbar translations
     navMemories: "Recuerdos",
     navDiary: "Diario",
-    navSettings: "Ajustes"
+    navSettings: "Ajustes",
+
+    // Auth Translations
+    authLoginTitle: "Iniciar Sesión en Apaxho",
+    authLoginSubtitle: "Accede a tu jardín compartido y cultiva tus recuerdos diarios.",
+    authRegisterTitle: "Crear Cuenta en Apaxho",
+    authRegisterSubtitle: "Únete y comparte notas y momentos mágicos con tu persona favorita.",
+    authLabelEmail: "Correo Electrónico",
+    authLabelPassword: "Contraseña",
+    authLabelName: "Tu Nombre / Apodo",
+    authBtnLogin: "Ingresar",
+    authBtnRegister: "Registrarse",
+    authGoogleBtn: "Entrar con Google",
+    authFacebookBtn: "Entrar con Facebook",
+    authOrDivider: "o continúa con",
+    authNoAccount: "¿Aún no tienes cuenta?",
+    authHaveAccount: "¿Ya tienes cuenta?",
+    authBackToHome: "Volver al inicio",
+    authErrorGeneric: "Ocurrió un error. Por favor intenta de nuevo."
   },
   en: {
     navHowItWorks: "How it works",
@@ -97,6 +115,24 @@ export const translations = {
     // Simulated mobile app navbar translations
     navMemories: "Memories",
     navDiary: "Diary",
-    navSettings: "Settings"
+    navSettings: "Settings",
+
+    // Auth Translations
+    authLoginTitle: "Log In to Apaxho",
+    authLoginSubtitle: "Access your shared garden and cultivate your daily memories.",
+    authRegisterTitle: "Create Account in Apaxho",
+    authRegisterSubtitle: "Join and share notes and magical moments with your favorite person.",
+    authLabelEmail: "Email Address",
+    authLabelPassword: "Password",
+    authLabelName: "Your Name / Nickname",
+    authBtnLogin: "Log In",
+    authBtnRegister: "Sign Up",
+    authGoogleBtn: "Sign In with Google",
+    authFacebookBtn: "Sign In with Facebook",
+    authOrDivider: "or continue with",
+    authNoAccount: "Don't have an account?",
+    authHaveAccount: "Already have an account?",
+    authBackToHome: "Back to Home",
+    authErrorGeneric: "An error occurred. Please try again."
   }
 };

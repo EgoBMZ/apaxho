@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import {
   InstagramIcon,
   TwitterIcon,
@@ -222,6 +224,15 @@ export default function Home() {
   const [isLinking, setIsLinking] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
@@ -373,17 +384,25 @@ export default function Home() {
               <DoodleGlobe size={18} />
               <span>{locale.toUpperCase()}</span>
             </motion.button>
-            <button className="text-sm font-bold text-royal-blue/70 hover:text-royal-blue hover:underline transition-colors">
-              {t("navEnter")}
-            </button>
-            <motion.a
-              href="#empezar"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="bg-royal-blue text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-royal-blue/20 transition-all whitespace-nowrap"
-            >
-              {t("navStart")}
-            </motion.a>
+            {user ? (
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  href="/dashboard"
+                  className="bg-royal-blue text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-royal-blue/20 transition-all whitespace-nowrap"
+                >
+                  {locale === "es" ? "Ir a mi Jardín 🌸" : "Go to my Garden 🌸"}
+                </Link>
+              </motion.div>
+            ) : (
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  href="/login"
+                  className="bg-royal-blue text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-royal-blue/20 transition-all whitespace-nowrap"
+                >
+                  {t("navEnter")}
+                </Link>
+              </motion.div>
+            )}
           </div>
         </div>
       </header>
