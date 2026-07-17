@@ -14,6 +14,7 @@ import {
   where, 
   getDocs, 
   addDoc, 
+  deleteDoc,
   Timestamp 
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -30,6 +31,17 @@ import {
   Sun2Icon,
   FireIcon
 } from "react-doodle-icons";
+
+// ─── Custom Globe Icon for Uniform Language Button ───
+const DoodleGlobe = ({ size = 18 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+    <circle cx="50" cy="50" r="40" />
+    <path d="M10,50 Q50,65 90,50" />
+    <path d="M10,50 Q50,35 90,50" />
+    <path d="M50,10 Q65,50 50,90" />
+    <path d="M50,10 Q35,50 50,90" />
+  </svg>
+);
 
 // ─── Custom Flower SVGs (Doodle Style) ───
 const PinkDaisy = ({ size = 56 }) => (
@@ -189,6 +201,35 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [locale, setLocale] = useState<"es" | "en">("es");
   
+  // Theme Toggle Mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark") {
+        setIsDarkMode(true);
+        document.documentElement.classList.add("dark");
+      } else {
+        setIsDarkMode(false);
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const next = !isDarkMode;
+    setIsDarkMode(next);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", next ? "dark" : "light");
+      if (next) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  };
+
   // Modals & inputs state
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [linkingCode, setLinkingCode] = useState("");
@@ -205,6 +246,13 @@ export default function DashboardPage() {
 
   // Lightbox State
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
+
+  // Custom Delete Modal State
+  const [noteIdToDelete, setNoteIdToDelete] = useState<string | null>(null);
+
+  // Note Inline Editing State
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const [editingNoteContent, setEditingNoteContent] = useState("");
 
   // Note-planting states
   const [noteContent, setNoteContent] = useState("");
@@ -331,6 +379,21 @@ export default function DashboardPage() {
       unsubSent();
     };
   }, [user, userProfile]);
+
+  // Mark received notes as seen automatically when they enter the dashboard
+  useEffect(() => {
+    if (!user || notes.length === 0) return;
+
+    notes.forEach(async (note) => {
+      if (note.receiverId === user.uid && !note.seen) {
+        try {
+          await updateDoc(doc(db, "notes", note.id), { seen: true });
+        } catch (err) {
+          console.error("Error marking note as seen:", err);
+        }
+      }
+    });
+  }, [notes, user]);
 
   const handleLogout = async () => {
     try {
@@ -523,6 +586,19 @@ export default function DashboardPage() {
     }
   };
 
+  // Update note content function
+  const handleUpdateNote = async (noteId: string) => {
+    if (!editingNoteContent.trim()) return;
+    try {
+      await updateDoc(doc(db, "notes", noteId), {
+        content: editingNoteContent.trim()
+      });
+      setEditingNoteId(null);
+    } catch (err) {
+      console.error("Error updating note:", err);
+    }
+  };
+
   const checkSentToday = (notesList: any[], targetUid: string) => {
     const todayStr = new Date().toDateString();
     return notesList.some((n) => {
@@ -540,8 +616,21 @@ export default function DashboardPage() {
   const isGardenHappy = meSentToday && partnerSentToday;
   const partnerName = partnerProfile?.displayName || "...";
 
+  // Identify editable last sent note
+  const mySentNotes = notes.filter((n) => n.senderId === user?.uid);
+  const lastSentNoteId = mySentNotes.length > 0 ? mySentNotes[mySentNotes.length - 1].id : null;
+
   const t = (key: keyof typeof translations.es) =>
     translations[locale]?.[key] ?? translations["es"][key];
+
+  // Dynamic Garden Background based on Dark Mode & Garden happiness
+  const gardenBg = isDarkMode
+    ? (isGardenHappy 
+        ? "linear-gradient(to bottom, #09090b, #0f172a, #111827)" // Starry night
+        : "linear-gradient(to bottom, #18181b, #1e1b4b, #27272a)") // Gray night
+    : (isGardenHappy 
+        ? "linear-gradient(to bottom, #bdecff, #dcfce7)" // Sunny day
+        : "linear-gradient(to bottom, #cbd5e1, #cbd5e1)"); // Gray day
 
   if (loading) {
     return (
@@ -559,10 +648,14 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f1f1f4] text-[#1c1c24] font-mono selection:bg-[#1c0dcb] selection:text-white p-6 md:p-10 relative overflow-hidden flex flex-col items-center justify-between">
+    <div className={`min-h-screen font-mono selection:bg-[#1c0dcb] selection:text-white p-6 md:p-10 relative overflow-hidden flex flex-col items-center justify-between transition-colors duration-300 ${
+      isDarkMode ? "bg-zinc-950 text-zinc-100" : "bg-[#f1f1f4] text-[#1c1c24]"
+    }`}>
       
       {/* Decorative Doodles Background */}
-      <div className="fixed inset-0 pointer-events-none select-none opacity-[0.06]" aria-hidden>
+      <div className={`fixed inset-0 pointer-events-none select-none transition-opacity duration-300 ${
+        isDarkMode ? "opacity-[0.03] text-white" : "opacity-[0.06] text-black"
+      }`} aria-hidden>
         <div className="absolute top-[8%] left-[5%] rotate-12"><Sun2Icon size={70} /></div>
         <div className="absolute top-[45%] left-[2%] -rotate-45"><CrownIcon size={56} /></div>
         <div className="absolute bottom-[8%] left-[6%] rotate-6"><CakeIcon size={64} /></div>
@@ -574,23 +667,48 @@ export default function DashboardPage() {
       {/* HEADER */}
       <header className="w-full max-w-5xl flex items-center justify-between gap-4 z-10">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9 text-[#1c0dcb]">
+          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className={`w-9 h-9 transition-colors duration-300 ${
+            isDarkMode ? "text-zinc-200" : "text-[#1c0dcb]"
+          }`}>
             <path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="8" />
             <path d="M50,27 C50,15 62,25 56,31" /><path d="M58,35 C70,30 65,45 57,39" />
             <path d="M54,41 C58,53 46,49 48,42" /><path d="M46,39 C34,45 30,30 42,35" />
             <path d="M44,31 C38,20 50,15 50,27" />
           </svg>
-          <span className="font-doodle text-2xl font-bold tracking-tight text-[#1c0dcb] lowercase">apaxho</span>
+          <span className={`font-doodle text-2xl font-bold tracking-tight lowercase transition-colors duration-300 ${
+            isDarkMode ? "text-zinc-200" : "text-[#1c0dcb]"
+          }`}>apaxho</span>
         </Link>
 
-        <div className="flex items-center gap-2.5 md:gap-4">
-          <button 
-            onClick={() => setLocale(locale === "es" ? "en" : "es")}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-[#1c0dcb]/20 rounded-xl text-xs font-bold text-[#1c0dcb] hover:bg-[#1c0dcb]/5 transition-all"
+        <div className="flex items-center gap-2.5 md:gap-4 shrink-0">
+          {/* Theme Toggle Button */}
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={toggleDarkMode}
+            className={`p-2.5 rounded-xl border-2 transition-all text-sm font-bold flex items-center justify-center shadow-sm h-10 w-10 ${
+              isDarkMode 
+                ? "border-zinc-800 bg-zinc-900 text-yellow-400 hover:bg-zinc-800" 
+                : "border-[#1c0dcb]/25 bg-white text-[#1c0dcb] hover:bg-[#1c0dcb]/8"
+            }`}
           >
-            <GlobeIcon className="w-3.5 h-3.5" />
+            {isDarkMode ? "☀️" : "🌙"}
+          </motion.button>
+
+          {/* Language Toggle Button (Styled identically to landing page) */}
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => setLocale(locale === "es" ? "en" : "es")}
+            className={`flex items-center gap-2.5 px-4.5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all shadow-sm h-10 shrink-0 ${
+              isDarkMode 
+                ? "border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800" 
+                : "border-[#1c0dcb]/25 bg-white text-[#1c0dcb] hover:bg-[#1c0dcb]/8 hover:border-[#1c0dcb]/50"
+            }`}
+          >
+            <DoodleGlobe size={18} />
             <span>{locale.toUpperCase()}</span>
-          </button>
+          </motion.button>
           
           {userProfile && (
             <motion.button 
@@ -601,7 +719,11 @@ export default function DashboardPage() {
                 setPartnerAlias(partnerName);
                 setShowSettings(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 border border-[#1c0dcb]/20 bg-white/55 rounded-xl text-xs font-bold text-[#1c0dcb] hover:bg-[#1c0dcb]/5 transition-all"
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 border rounded-xl text-xs font-bold transition-all h-10 shrink-0 ${
+                isDarkMode 
+                  ? "border-zinc-800 bg-zinc-900 text-zinc-200 hover:bg-zinc-800" 
+                  : "border-[#1c0dcb]/20 bg-white/55 text-[#1c0dcb] hover:bg-[#1c0dcb]/5"
+              }`}
             >
               <span>⚙️ {locale === "es" ? "Ajustes" : "Settings"}</span>
             </motion.button>
@@ -611,7 +733,7 @@ export default function DashboardPage() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={() => setShowLogoutConfirm(true)}
-            className="bg-[#1c0dcb] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md shadow-[#1c0dcb]/20 transition-all hover:bg-[#1c0dcb]/90"
+            className="bg-[#1c0dcb] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md shadow-[#1c0dcb]/20 transition-all hover:bg-[#1c0dcb]/90 h-10 shrink-0"
           >
             {locale === "es" ? "Salir" : "Logout"}
           </motion.button>
@@ -632,11 +754,17 @@ export default function DashboardPage() {
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white border-2 border-[#1c0dcb]/20 rounded-3xl p-6 shadow-lg shadow-[#1c0dcb]/5"
+                className={`border-2 rounded-3xl p-6 shadow-lg transition-colors duration-300 ${
+                  isDarkMode 
+                    ? "bg-zinc-900 border-zinc-800 shadow-zinc-950/20" 
+                    : "bg-white border-[#1c0dcb]/20 shadow-[#1c0dcb]/5"
+                }`}
               >
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-xl">🌸</span>
-                  <h3 className="font-doodle text-base font-bold text-[#1c0dcb]">
+                  <h3 className={`font-doodle text-base font-bold transition-colors ${
+                    isDarkMode ? "text-zinc-200" : "text-[#1c0dcb]"
+                  }`}>
                     {locale === "es" ? "Plantar un Apapacho" : "Plant a Cuddle"}
                   </h3>
                 </div>
@@ -648,16 +776,26 @@ export default function DashboardPage() {
                     value={noteContent}
                     onChange={(e) => setNoteContent(e.target.value)}
                     maxLength={140}
-                    className="w-full h-24 bg-[#f8f8fa] border border-[#1c0dcb]/15 focus:border-[#1c0dcb] outline-none rounded-2xl p-4 text-xs font-mono resize-none transition-colors"
+                    className={`w-full h-24 outline-none rounded-2xl p-4 text-xs font-mono resize-none transition-colors border ${
+                      isDarkMode 
+                        ? "bg-zinc-800 border-zinc-700 text-zinc-100 placeholder-zinc-550 focus:border-[#1c0dcb]" 
+                        : "bg-[#f8f8fa] border-[#1c0dcb]/15 focus:border-[#1c0dcb] text-[#1c1c24]"
+                    }`}
                   />
 
                   {/* Photo selector input (Professional Crop Tool Integration) */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+                    <label className={`text-[10px] uppercase tracking-wider font-bold transition-colors ${
+                      isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                    }`}>
                       {locale === "es" ? "Añadir Foto (Expiración de 24h)" : "Add Photo (24h Expiration)"}
                     </label>
                     <div className="flex items-center gap-3">
-                      <label className="cursor-pointer bg-[#1c0dcb]/5 hover:bg-[#1c0dcb]/10 border border-[#1c0dcb]/15 px-3.5 py-2 rounded-xl text-xs font-bold text-[#1c0dcb] flex items-center gap-2 transition-all">
+                      <label className={`cursor-pointer border px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+                        isDarkMode 
+                          ? "bg-zinc-800 border-zinc-700 hover:bg-zinc-750 text-zinc-300"
+                          : "bg-[#1c0dcb]/5 hover:bg-[#1c0dcb]/10 border-[#1c0dcb]/15 text-[#1c0dcb]"
+                      }`}>
                         <svg viewBox="0 0 100 100" className="w-4 h-4 fill-none stroke-current" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="15" y="25" width="70" height="55" rx="10" />
                           <circle cx="50" cy="52" r="15" />
@@ -696,7 +834,9 @@ export default function DashboardPage() {
 
                   {/* Flower & Note Theme Selector */}
                   <div className="flex flex-col gap-2">
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+                    <span className={`text-[10px] uppercase tracking-wider font-bold transition-colors ${
+                      isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                    }`}>
                       {locale === "es" ? "Selecciona Flor y Color" : "Select Flower & Color"}
                     </span>
                     <div className="grid grid-cols-4 gap-2">
@@ -751,13 +891,17 @@ export default function DashboardPage() {
 
               {/* Memory Diary (Notes feed) */}
               <div className="flex flex-col gap-3">
-                <h3 className="text-xs uppercase tracking-widest font-bold text-[#1c0dcb]/70 px-2 flex justify-between">
+                <h3 className={`text-xs uppercase tracking-widest font-bold px-2 flex justify-between transition-colors ${
+                  isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                }`}>
                   <span>{locale === "es" ? "Historial de Apapachos" : "Cuddle History"}</span>
-                  <span className="lowercase text-[10px] text-[#1c0dcb] font-bold">{notes.length} {locale === "es" ? "notas" : "notes"}</span>
+                  <span className={`lowercase text-[10px] font-bold ${isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]"}`}>{notes.length} {locale === "es" ? "notas" : "notes"}</span>
                 </h3>
                 <div className="flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-1">
                   {notes.length === 0 ? (
-                    <div className="text-center py-8 text-xs text-[#1c1c24]/50 border-2 border-dashed border-[#1c0dcb]/10 rounded-2xl bg-white/20">
+                    <div className={`text-center py-8 text-xs border-2 border-dashed rounded-2xl transition-colors ${
+                      isDarkMode ? "border-zinc-800 bg-zinc-900/30 text-zinc-500" : "text-[#1c1c24]/50 border-[#1c0dcb]/10 bg-white/20"
+                    }`}>
                       {locale === "es" ? "Aún no hay notas compartidas." : "No shared notes yet."}
                     </div>
                   ) : (
@@ -775,14 +919,25 @@ export default function DashboardPage() {
                       );
 
                       // Theme classes mapped to the flower selection
-                      let themeClass = "bg-[#f0effd] border-[#1c0dcb]/15 text-[#1c1c24]";
+                      let themeClass = isDarkMode 
+                        ? "bg-zinc-900 border-zinc-800 text-zinc-100" 
+                        : "bg-[#f0effd] border-[#1c0dcb]/15 text-[#1c1c24]";
+                      
                       if (note.colorTheme === "pink") {
-                        themeClass = "bg-[#ffeef3] border-pink-300 text-pink-900";
+                        themeClass = isDarkMode 
+                          ? "bg-pink-950/20 border-pink-900/50 text-pink-200" 
+                          : "bg-[#ffeef3] border-pink-300 text-pink-900";
                       } else if (note.colorTheme === "yellow") {
-                        themeClass = "bg-[#fefce8] border-yellow-200 text-yellow-900";
+                        themeClass = isDarkMode 
+                          ? "bg-yellow-950/20 border-yellow-900/50 text-yellow-200" 
+                          : "bg-[#fefce8] border-yellow-200 text-yellow-900";
                       } else if (note.colorTheme === "orange") {
-                        themeClass = "bg-[#fff7ed] border-orange-200 text-orange-900";
+                        themeClass = isDarkMode 
+                          ? "bg-orange-950/20 border-orange-900/50 text-orange-200" 
+                          : "bg-[#fff7ed] border-orange-200 text-orange-900";
                       }
+
+                      const isEditable = note.id === lastSentNoteId && !note.seen;
 
                       return (
                         <motion.div 
@@ -798,13 +953,46 @@ export default function DashboardPage() {
                             <span>{dateStr}</span>
                           </div>
 
-                          <p className="font-mono">{note.content}</p>
+                          {/* TEXT EDITING MODE */}
+                          {editingNoteId === note.id ? (
+                            <div className="flex flex-col gap-2 mt-1">
+                              <textarea
+                                value={editingNoteContent}
+                                onChange={(e) => setEditingNoteContent(e.target.value)}
+                                className={`w-full h-16 rounded-xl p-2 text-xs font-mono outline-none resize-none border ${
+                                  isDarkMode 
+                                    ? "bg-zinc-800 border-zinc-700 text-white" 
+                                    : "bg-white/80 border-black/10 text-neutral-800"
+                                }`}
+                              />
+                              <div className="flex gap-2 justify-end">
+                                <button 
+                                  type="button" 
+                                  onClick={() => setEditingNoteId(null)}
+                                  className="px-2.5 py-1 bg-gray-200 hover:bg-gray-300 rounded-lg text-[10px] font-bold text-black"
+                                >
+                                  {locale === "es" ? "Cancelar" : "Cancel"}
+                                </button>
+                                <button 
+                                  type="button" 
+                                  onClick={() => handleUpdateNote(note.id)}
+                                  className="px-2.5 py-1 bg-[#1c0dcb] text-white rounded-lg text-[10px] font-bold"
+                                >
+                                  {locale === "es" ? "Guardar" : "Save"}
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="font-mono">{note.content}</p>
+                          )}
 
                           {/* PHOTO RENDERING WITH AUTO-DESTRUCT & FULLSCREEN PREVIEW */}
                           {note.imageUrl && (
                             <div className="mt-1 flex justify-center">
                               {isExpired ? (
-                                <div className="border border-dashed border-black/10 rounded-xl p-2.5 bg-black/5 text-center text-[10px] opacity-60 w-full">
+                                <div className={`border border-dashed rounded-xl p-2.5 text-center text-[10px] opacity-60 w-full font-mono ${
+                                  isDarkMode ? "border-zinc-800 bg-zinc-950/40" : "border-black/10 bg-black/5"
+                                }`}>
                                   ⏳ {locale === "es" ? "Foto autodestruida tras 24h" : "Photo expired after 24h"}
                                 </div>
                               ) : (
@@ -818,11 +1006,42 @@ export default function DashboardPage() {
                             </div>
                           )}
 
-                          <div className="text-right text-xs opacity-75">
-                            {note.colorTheme === "pink" && "🌸"}
-                            {note.colorTheme === "lavender" && "🪻"}
-                            {note.colorTheme === "yellow" && "🌻"}
-                            {note.colorTheme === "orange" && "🌷"}
+                          {/* FOOTER & NOTE MANAGEMENT BUTTONS (Only if last note and not seen yet) */}
+                          <div className="flex justify-between items-center mt-1 border-t border-black/5 pt-1.5">
+                            <span className="text-right text-xs opacity-75">
+                              {note.colorTheme === "pink" && "🌸"}
+                              {note.colorTheme === "lavender" && "🪻"}
+                              {note.colorTheme === "yellow" && "🌻"}
+                              {note.colorTheme === "orange" && "🌷"}
+                            </span>
+
+                            {isEditable && editingNoteId !== note.id && (
+                              <div className="flex gap-2">
+                                <button 
+                                  type="button"
+                                  onClick={() => {
+                                    setEditingNoteId(note.id);
+                                    setEditingNoteContent(note.content);
+                                  }}
+                                  className="text-[10px] font-bold text-[#1c0dcb] hover:underline flex items-center gap-0.5"
+                                >
+                                  ✏️ {locale === "es" ? "Editar" : "Edit"}
+                                </button>
+                                <button 
+                                  type="button"
+                                  onClick={() => setNoteIdToDelete(note.id)}
+                                  className="text-[10px] font-bold text-red-500 hover:underline flex items-center gap-0.5"
+                                >
+                                  🗑️ {locale === "es" ? "Eliminar" : "Delete"}
+                                </button>
+                              </div>
+                            )}
+
+                            {note.seen && isMe && (
+                              <span className="text-[9px] font-bold text-green-600 bg-green-50/70 px-1.5 py-0.5 rounded-md self-end opacity-75">
+                                ✓ {locale === "es" ? "Visto" : "Seen"}
+                              </span>
+                            )}
                           </div>
                         </motion.div>
                       );
@@ -837,18 +1056,28 @@ export default function DashboardPage() {
             <div className="lg:col-span-7 flex flex-col gap-4 w-full">
               
               {/* Garden Header */}
-              <div className="bg-white border-2 border-[#1c0dcb]/25 rounded-3xl p-5 shadow-lg shadow-[#1c0dcb]/5 flex flex-col gap-3 relative">
+              <div className={`border-2 rounded-3xl p-5 shadow-lg flex flex-col gap-3 relative transition-colors duration-300 ${
+                isDarkMode 
+                  ? "bg-zinc-900 border-zinc-800 shadow-zinc-950/20" 
+                  : "bg-white border-[#1c0dcb]/25 shadow-[#1c0dcb]/5"
+              }`}>
                 
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-full bg-[#1c0dcb]/5 flex items-center justify-center text-xl shrink-0">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl shrink-0 ${
+                      isDarkMode ? "bg-zinc-850" : "bg-[#1c0dcb]/5"
+                    }`}>
                       {isGardenHappy ? "🌸" : "☁️"}
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-doodle text-sm md:text-base font-bold text-royal-blue flex items-center gap-1.5 flex-wrap">
+                      <h3 className={`font-doodle text-sm md:text-base font-bold flex items-center gap-1.5 flex-wrap transition-colors ${
+                        isDarkMode ? "text-zinc-200" : "text-royal-blue"
+                      }`}>
                         <span>{locale === "es" ? "Jardín de" : "Garden of"} {userProfile?.displayName} &amp; {partnerName}</span>
                       </h3>
-                      <p className="text-[10px] text-[#1c1c24]/50 font-bold lowercase">
+                      <p className={`text-[10px] font-bold lowercase transition-colors ${
+                        isDarkMode ? "text-zinc-500" : "text-[#1c1c24]/50"
+                      }`}>
                         {isGardenHappy 
                           ? (locale === "es" ? "¡jardín soleado y brillante! ☀️" : "sunny and bright garden! ☀️")
                           : (locale === "es" ? "jardín gris, esperando apapachos... ☁️" : "cloudy garden, awaiting cuddles... ☁️")
@@ -858,7 +1087,11 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
-                    <div className="flex items-center gap-1.5 bg-[#e0dffc] border border-royal-blue/10 px-3 py-1.5 rounded-2xl text-[11px] font-bold text-[#1c0dcb] shadow-inner">
+                    <div className={`flex items-center gap-1.5 border px-3 py-1.5 rounded-2xl text-[11px] font-bold shadow-inner transition-colors ${
+                      isDarkMode 
+                        ? "bg-zinc-800 border-zinc-700 text-zinc-300" 
+                        : "bg-[#e0dffc] border-royal-blue/10 text-[#1c0dcb]"
+                    }`}>
                       <FireIcon size={18} className="text-orange-500 animate-pulse" />
                       <span>{streakCount} {locale === "es" ? "Racha" : "Streak"}</span>
                     </div>
@@ -880,22 +1113,31 @@ export default function DashboardPage() {
 
               {/* The Virtual Garden Canvas with Dynamic Weather Filter */}
               <div 
-                className="relative w-full h-[450px] border-2 border-[#1c0dcb]/25 rounded-[36px] overflow-hidden shadow-inner transition-all duration-1000"
+                className={`relative w-full h-[450px] border-2 rounded-[36px] overflow-hidden shadow-inner transition-all duration-1000 ${
+                  isDarkMode ? "border-zinc-800" : "border-[#1c0dcb]/25"
+                }`}
                 style={{ 
                   filter: isGardenHappy ? "none" : "grayscale(0.65) brightness(0.92)",
-                  background: isGardenHappy 
-                    ? "linear-gradient(to bottom, #bdecff, #dcfce7)" 
-                    : "linear-gradient(to bottom, #cbd5e1, #cbd5e1)"
+                  background: gardenBg
                 }}
               >
                 
                 {/* Grass & Wavy Ground SVG */}
                 <div className="absolute inset-x-0 bottom-0 h-[30%] pointer-events-none z-0">
                   <svg viewBox="0 0 1000 300" fill="none" className="w-full h-full preserve-3d" preserveAspectRatio="none">
-                    <path d="M0,150 Q250,110 500,150 T1000,150 L1000,300 L0,300 Z" fill="#bbf7d0" />
-                    <path d="M0,200 Q300,180 600,210 T1000,190 L1000,300 L0,300 Z" fill="#86efac" />
+                    <path d="M0,150 Q250,110 500,150 T1000,150 L1000,300 L0,300 Z" fill={isDarkMode ? "#064e3b" : "#bbf7d0"} className="transition-colors duration-1000" />
+                    <path d="M0,200 Q300,180 600,210 T1000,190 L1000,300 L0,300 Z" fill={isDarkMode ? "#065f46" : "#86efac"} className="transition-colors duration-1000" />
                   </svg>
                 </div>
+
+                {/* Glowing Stars (Only in Happy Night Mode) */}
+                {isDarkMode && isGardenHappy && (
+                  <>
+                    <div className="absolute top-[8%] left-[10%] text-yellow-300/40 animate-pulse"><StarIcon size={12} /></div>
+                    <div className="absolute top-[18%] right-[25%] text-yellow-300/30 animate-pulse" style={{ animationDelay: "1s" }}><StarIcon size={14} /></div>
+                    <div className="absolute top-[12%] right-[10%] text-yellow-200/50 animate-pulse" style={{ animationDelay: "0.5s" }}><StarIcon size={10} /></div>
+                  </>
+                )}
 
                 {/* Floating Clouds with varying speeds and opacities */}
                 <motion.div 
@@ -904,7 +1146,7 @@ export default function DashboardPage() {
                   className="absolute top-[10%] left-0 pointer-events-none select-none z-0"
                   style={{ opacity: isGardenHappy ? 0.45 : 0.7 }}
                 >
-                  <svg width="100" height="50" viewBox="0 0 100 50" fill={isGardenHappy ? "white" : "#94a3b8"} className="transition-colors duration-1000">
+                  <svg width="100" height="50" viewBox="0 0 100 50" fill={isGardenHappy ? (isDarkMode ? "#1e293b" : "white") : "#94a3b8"} className="transition-colors duration-1000">
                     <path d="M20,40 C10,40 5,30 15,25 C10,15 30,10 40,20 C50,10 70,15 70,25 C80,25 85,35 75,40 Z" />
                   </svg>
                 </motion.div>
@@ -915,7 +1157,7 @@ export default function DashboardPage() {
                   className="absolute top-[25%] left-0 pointer-events-none select-none z-0"
                   style={{ opacity: isGardenHappy ? 0.35 : 0.6 }}
                 >
-                  <svg width="80" height="40" viewBox="0 0 100 50" fill={isGardenHappy ? "white" : "#94a3b8"} className="transition-colors duration-1000">
+                  <svg width="80" height="40" viewBox="0 0 100 50" fill={isGardenHappy ? (isDarkMode ? "#1e293b" : "white") : "#94a3b8"} className="transition-colors duration-1000">
                     <path d="M20,40 C10,40 5,30 15,25 C10,15 30,10 40,20 C50,10 70,15 70,25 C80,25 85,35 75,40 Z" />
                   </svg>
                 </motion.div>
@@ -945,7 +1187,7 @@ export default function DashboardPage() {
                             left: pos.left,
                             bottom: pos.bottom
                           }}
-                          className="origin-bottom transform -translate-x-1/2 pointer-events-auto cursor-help group text-royal-blue"
+                          className="origin-bottom transform -translate-x-1/2 pointer-events-auto cursor-help group text-[#1c0dcb]"
                         >
                           {/* Flower rendering */}
                           {note.colorTheme === "pink" && <PinkDaisy size={54} />}
@@ -954,11 +1196,15 @@ export default function DashboardPage() {
                           {note.colorTheme === "orange" && <TulipOrange size={54} />}
 
                           {/* Hover Tooltip showing Note details and Photo preview */}
-                          <div className="absolute bottom-[105%] left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-sm border-2 border-royal-blue/20 px-3.5 py-2.5 rounded-2xl text-[10px] text-royal-blue font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-normal w-44 leading-normal pointer-events-none z-30 select-none">
+                          <div className={`absolute bottom-[105%] left-1/2 transform -translate-x-1/2 border-2 px-3.5 py-2.5 rounded-2xl text-[10px] font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-normal w-44 leading-normal pointer-events-none z-30 select-none ${
+                            isDarkMode 
+                              ? "bg-zinc-900 border-zinc-700 text-zinc-100" 
+                              : "bg-white/95 border-royal-blue/20 text-royal-blue"
+                          }`}>
                             <div className="font-sans border-b border-royal-blue/10 pb-1 mb-1 flex justify-between">
                               <span>{note.senderId === user?.uid ? (locale === "es" ? "Tú" : "You") : partnerName}</span>
                             </div>
-                            <p className="font-mono text-[#1c1c24] normal-case mb-1">{note.content}</p>
+                            <p className={`font-mono normal-case mb-1 ${isDarkMode ? "text-zinc-200" : "text-[#1c1c24]"}`}>{note.content}</p>
                             
                             {note.imageUrl && (
                               <div className="mt-1">
@@ -983,7 +1229,9 @@ export default function DashboardPage() {
 
                 {/* Empty State Help Text */}
                 {notes.length === 0 && (
-                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-xs text-[#1c0dcb]/50 font-bold z-10 leading-relaxed max-w-sm mx-auto">
+                  <div className={`absolute inset-0 flex items-center justify-center p-8 text-center text-xs font-bold z-10 leading-relaxed max-w-sm mx-auto ${
+                    isDarkMode ? "text-zinc-650" : "text-[#1c0dcb]/50"
+                  }`}>
                     {locale === "es"
                       ? "🌱 Tu jardín está listo. ¡Planta tu primer apapacho a la izquierda para ver florecer tu diario!"
                       : "🌱 Your garden is ready. Plant your first cuddle on the left to watch your diary bloom!"
@@ -1000,15 +1248,23 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-md bg-white border-2 border-[#1c0dcb]/20 rounded-3xl p-8 shadow-xl shadow-[#1c0dcb]/5 flex flex-col gap-6"
+            className={`w-full max-w-md border-2 rounded-3xl p-8 shadow-xl flex flex-col gap-6 transition-colors duration-300 ${
+              isDarkMode 
+                ? "bg-zinc-900 border-zinc-800 shadow-zinc-950/20" 
+                : "bg-white border-[#1c0dcb]/20 shadow-[#1c0dcb]/5"
+            }`}
           >
             {/* Header Title */}
             <div className="text-center flex flex-col gap-2">
               <span className="text-3xl animate-bounce">🌸</span>
-              <h2 className="font-doodle text-xl font-bold text-[#1c0dcb]">
+              <h2 className={`font-doodle text-xl font-bold transition-colors ${
+                isDarkMode ? "text-zinc-200" : "text-[#1c0dcb]"
+              }`}>
                 {locale === "es" ? "Conecta tu Jardín" : "Connect your Garden"}
               </h2>
-              <p className="text-xs text-[#1c1c24]/60 max-w-xs mx-auto leading-relaxed">
+              <p className={`text-xs max-w-xs mx-auto leading-relaxed transition-colors ${
+                isDarkMode ? "text-zinc-400" : "text-[#1c1c24]/60"
+              }`}>
                 {locale === "es"
                   ? "Para empezar a compartir notas, debes vincular tu cuenta con tu persona favorita."
                   : "To start sharing notes, you must link your account with your favorite person."
@@ -1020,19 +1276,27 @@ export default function DashboardPage() {
 
             {/* 1. Share own code */}
             <div className="flex flex-col gap-2">
-              <label className="text-[11px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+              <label className={`text-[11px] uppercase tracking-wider font-bold transition-colors ${
+                isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+              }`}>
                 {locale === "es" ? "Tu Código de Invitación" : "Your Invitation Code"}
               </label>
               
               <div className="flex gap-2">
-                <div className="flex-1 bg-[#f8f8fa] border border-[#1c0dcb]/15 rounded-xl px-4 py-3 text-sm font-bold text-[#1c1c24] flex items-center justify-center tracking-widest shadow-inner">
+                <div className={`flex-1 border rounded-xl px-4 py-3 text-sm font-bold flex items-center justify-center tracking-widest shadow-inner ${
+                  isDarkMode ? "bg-zinc-850 border-zinc-700 text-zinc-100" : "bg-[#f8f8fa] border-[#1c0dcb]/15 text-[#1c1c24]"
+                }`}>
                   {userProfile?.partnerCode || "..."}
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleCopyCode}
-                  className="bg-[#1c0dcb]/10 hover:bg-[#1c0dcb]/15 text-[#1c0dcb] border border-[#1c0dcb]/10 px-4 rounded-xl text-xs font-bold transition-all whitespace-nowrap"
+                  className={`border px-4 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                    isDarkMode 
+                      ? "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-750" 
+                      : "bg-[#1c0dcb]/10 hover:bg-[#1c0dcb]/15 text-[#1c0dcb] border-[#1c0dcb]/10"
+                  }`}
                 >
                   {copied ? (locale === "es" ? "¡Copiado!" : "Copied!") : (locale === "es" ? "Copiar" : "Copy")}
                 </motion.button>
@@ -1042,7 +1306,9 @@ export default function DashboardPage() {
             {/* Divider */}
             <div className="flex items-center my-1">
               <div className="flex-grow border-t border-[#1c1c24]/10"></div>
-              <span className="text-[10px] text-[#1c1c24]/40 uppercase tracking-widest px-3 font-bold">
+              <span className={`text-[10px] uppercase tracking-widest px-3 font-bold ${
+                isDarkMode ? "text-zinc-500" : "text-[#1c1c24]/40"
+              }`}>
                 {locale === "es" ? "o introduce el de tu pareja" : "or enter your partner's"}
               </span>
               <div className="flex-grow border-t border-[#1c1c24]/10"></div>
@@ -1051,7 +1317,9 @@ export default function DashboardPage() {
             {/* 2. Enter partner's code */}
             <form onSubmit={handleLinkPartner} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+                <label className={`text-[11px] uppercase tracking-wider font-bold transition-colors ${
+                  isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                }`}>
                   {locale === "es" ? "Código de tu Pareja" : "Partner's Code"}
                 </label>
                 <input
@@ -1060,7 +1328,11 @@ export default function DashboardPage() {
                   placeholder="APX-XXX-XXX"
                   value={linkingCode}
                   onChange={(e) => setLinkingCode(e.target.value)}
-                  className="w-full bg-[#f8f8fa] border border-[#1c0dcb]/15 focus:border-[#1c0dcb] outline-none rounded-xl px-4 py-3 text-sm font-bold text-center tracking-widest uppercase transition-colors"
+                  className={`w-full text-sm font-bold text-center tracking-widest uppercase transition-colors outline-none border rounded-xl px-4 py-3 ${
+                    isDarkMode 
+                      ? "bg-zinc-850 border-zinc-700 text-white focus:border-[#1c0dcb] placeholder-zinc-600" 
+                      : "bg-[#f8f8fa] border-[#1c0dcb]/15 focus:border-[#1c0dcb] text-royal-blue placeholder-royal-blue/30"
+                  }`}
                 />
               </div>
 
@@ -1085,7 +1357,9 @@ export default function DashboardPage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="text-center text-[10px] text-[#1c0dcb]/50 font-bold z-10 mt-6">
+      <footer className={`text-center text-[10px] font-bold z-10 mt-6 transition-colors ${
+        isDarkMode ? "text-zinc-500" : "text-[#1c0dcb]/50"
+      }`}>
         <span>© {new Date().getFullYear()} APAXHO. {t("footerMadeWith")}</span>
       </footer>
 
@@ -1125,7 +1399,9 @@ export default function DashboardPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white border-2 border-[#1c0dcb]/25 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col gap-4 text-xs text-[#1c1c24] font-mono"
+              className={`border-2 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col gap-4 text-xs font-mono transition-colors ${
+                isDarkMode ? "bg-zinc-900 border-zinc-800 text-zinc-100" : "bg-white border-[#1c0dcb]/25 text-[#1c1c24]"
+              }`}
             >
               <div className="flex justify-between items-center border-b border-[#1c0dcb]/10 pb-2">
                 <h3 className="font-doodle text-sm font-bold text-[#1c0dcb]">
@@ -1185,6 +1461,59 @@ export default function DashboardPage() {
         )}
       </AnimatePresence>
 
+      {/* ELIMINAR NOTA CONFIRM MODAL (Custom, doesn't close by itself) */}
+      <AnimatePresence>
+        {noteIdToDelete && (
+          <div className="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className={`border-2 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col gap-6 font-mono text-xs transition-colors ${
+                isDarkMode ? "bg-zinc-900 border-zinc-800 text-zinc-100" : "bg-white border-[#1c0dcb]/20 text-[#1c1c24]"
+              }`}
+            >
+              <div className="text-center flex flex-col gap-2">
+                <span className="text-3xl animate-bounce">🗑️</span>
+                <h3 className="font-doodle text-base font-bold text-red-600">
+                  {locale === "es" ? "¿Eliminar esta Nota?" : "Delete this Note?"}
+                </h3>
+                <p className={`text-[11px] leading-relaxed transition-colors ${
+                  isDarkMode ? "text-zinc-400" : "text-[#1c1c24]/75"
+                }`}>
+                  {locale === "es" 
+                    ? "Esta acción eliminará la flor de tu jardín y el mensaje del historial permanentemente."
+                    : "This will permanently remove the flower from your garden and the note from your history."}
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setNoteIdToDelete(null)}
+                  className="flex-1 py-3 border-2 border-[#1c0dcb]/15 rounded-xl font-bold text-xs hover:bg-[#1c0dcb]/5 transition-colors"
+                >
+                  {locale === "es" ? "Cancelar" : "Cancel"}
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      await deleteDoc(doc(db, "notes", noteIdToDelete));
+                    } catch (err) {
+                      console.error("Error deleting note:", err);
+                    } finally {
+                      setNoteIdToDelete(null);
+                    }
+                  }}
+                  className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold text-xs shadow-md shadow-red-600/20 hover:bg-red-700 transition-colors"
+                >
+                  {locale === "es" ? "Sí, eliminar" : "Yes, delete"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* SETTINGS / AJUSTES MODAL */}
       <AnimatePresence>
         {showSettings && (
@@ -1193,7 +1522,9 @@ export default function DashboardPage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white border-2 border-[#1c0dcb]/25 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative flex flex-col gap-5 text-xs text-[#1c1c24] font-mono"
+              className={`border-2 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative flex flex-col gap-5 text-xs font-mono transition-colors ${
+                isDarkMode ? "bg-zinc-900 border-zinc-800 text-zinc-100" : "bg-white border-[#1c0dcb]/25 text-[#1c1c24]"
+              }`}
             >
               <div className="flex justify-between items-center border-b border-[#1c0dcb]/10 pb-3">
                 <h3 className="font-doodle text-base font-bold text-[#1c0dcb]">
@@ -1214,7 +1545,9 @@ export default function DashboardPage() {
                 // EDIT PROFILE FORM
                 <form onSubmit={handleSaveSettings} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+                    <label className={`text-[11px] uppercase tracking-wider font-bold transition-colors ${
+                      isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                    }`}>
                       {locale === "es" ? "Mi Nombre" : "My Name"}
                     </label>
                     <input 
@@ -1223,13 +1556,17 @@ export default function DashboardPage() {
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
                       placeholder="Diego"
-                      className="w-full bg-[#f8f8fa] border border-[#1c0dcb]/15 focus:border-[#1c0dcb] outline-none rounded-xl px-4 py-2.5"
+                      className={`w-full border outline-none rounded-xl px-4 py-2.5 ${
+                        isDarkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-[#f8f8fa] border-[#1c0dcb]/15"
+                      }`}
                     />
                   </div>
 
                   {userProfile?.partnerUid && (
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] uppercase tracking-wider font-bold text-[#1c0dcb]/70">
+                      <label className={`text-[11px] uppercase tracking-wider font-bold transition-colors ${
+                        isDarkMode ? "text-zinc-400" : "text-[#1c0dcb]/70"
+                      }`}>
                         {locale === "es" ? "Apodo de mi Pareja" : "Partner's Nickname"}
                       </label>
                       <input 
@@ -1237,7 +1574,9 @@ export default function DashboardPage() {
                         value={partnerAlias}
                         onChange={(e) => setPartnerAlias(e.target.value)}
                         placeholder="Sharon"
-                        className="w-full bg-[#f8f8fa] border border-[#1c0dcb]/15 focus:border-[#1c0dcb] outline-none rounded-xl px-4 py-2.5"
+                        className={`w-full border outline-none rounded-xl px-4 py-2.5 ${
+                          isDarkMode ? "bg-zinc-800 border-zinc-700 text-white" : "bg-[#f8f8fa] border-[#1c0dcb]/15"
+                        }`}
                       />
                     </div>
                   )}
@@ -1268,7 +1607,9 @@ export default function DashboardPage() {
                   <h4 className="font-bold text-red-600 text-sm">
                     {locale === "es" ? "¿Desvincular Jardín?" : "Unlink Garden?"}
                   </h4>
-                  <p className="text-[11px] text-[#1c1c24]/75 leading-relaxed px-2">
+                  <p className={`text-[11px] leading-relaxed px-2 transition-colors ${
+                    isDarkMode ? "text-zinc-400" : "text-[#1c1c24]/75"
+                  }`}>
                     {locale === "es"
                       ? "Si te desvinculas, se romperá la conexión del jardín y las notas guardadas no se mostrarán más. Tendrán que volver a enlazarse con sus códigos."
                       : "If you unlink, the garden connection will be severed, and saved notes will no longer be visible. You will need to link again using your codes."}
@@ -1305,14 +1646,18 @@ export default function DashboardPage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white border-2 border-[#1c0dcb]/20 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col gap-6"
+              className={`border-2 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col gap-6 transition-colors ${
+                isDarkMode ? "bg-zinc-900 border-zinc-800 text-zinc-100" : "bg-white border-[#1c0dcb]/20 text-[#1c1c24]"
+              }`}
             >
               <div className="text-center flex flex-col gap-2">
                 <span className="text-3xl animate-pulse">🌸</span>
                 <h3 className="font-doodle text-lg font-bold text-[#1c0dcb]">
                   {locale === "es" ? "¿Cerrar Sesión?" : "Log Out?"}
                 </h3>
-                <p className="text-xs text-[#1c1c24]/75 leading-relaxed">
+                <p className={`text-xs leading-relaxed transition-colors ${
+                  isDarkMode ? "text-zinc-400" : "text-[#1c1c24]/75"
+                }`}>
                   {locale === "es" 
                     ? "¿De verdad quieres salir de tu jardín de Apaxho?"
                     : "Are you sure you want to leave your Apaxho garden?"}

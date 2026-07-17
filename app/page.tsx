@@ -151,51 +151,51 @@ const DoodleRose = ({ size = 38 }: { size?: number }) => (
 );
 
 const DoodleMushroom = ({ size = 36 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 90 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15,55 C12,30 28,12 45,12 C62,12 78,30 75,55 Z" />
-    <path d="M32,55 C32,75 33,78 33,82 C50,82 57,75 57,55" />
-    <circle cx="38" cy="35" r="5" />
-    <circle cx="55" cy="42" r="4" />
-    <circle cx="52" cy="28" r="3" />
+  <svg width={size} height={size} viewBox="0 0 90 90" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15,50 C15,22 75,22 75,50 L15,50 Z" />
+    <path d="M35,50 L35,80 C35,85 55,85 55,80 L55,50" />
+    <circle cx="30" cy="35" r="4" fill="currentColor" />
+    <circle cx="45" cy="28" r="5" fill="currentColor" />
+    <circle cx="60" cy="38" r="4" fill="currentColor" />
   </svg>
 );
 
-const DoodleWave = ({ size = 50 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 120 50" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5,25 C20,10 30,40 45,25 C60,10 70,40 85,25 C100,10 110,35 115,25" />
-  </svg>
-);
-
-const DoodleNote = ({ size = 30 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 80 100" fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="10" y="5" width="60" height="80" rx="6" />
-    <line x1="22" y1="28" x2="58" y2="28" />
-    <line x1="22" y1="42" x2="58" y2="42" />
-    <line x1="22" y1="56" x2="44" y2="56" />
-    <path d="M55,65 L68,55 L60,75 Z" />
-  </svg>
-);
-
-const DoodleButterfly = ({ size = 38 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 110 80" fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M55,40 C55,40 30,20 10,28 C5,30 8,45 20,42 C35,38 50,48 55,40" />
-    <path d="M55,40 C55,40 80,20 100,28 C105,30 102,45 90,42 C75,38 60,48 55,40" />
-    <path d="M55,40 C55,40 38,55 20,58 C10,60 8,72 20,70 C38,67 52,55 55,40" />
-    <path d="M55,40 C55,40 72,55 90,58 C100,60 102,72 90,70 C72,67 58,55 55,40" />
-    <ellipse cx="55" cy="40" rx="4" ry="10" />
-    <path d="M52,22 C50,15 58,15 56,22" strokeWidth="3" />
+const DoodleButterfly = ({ size = 36 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="50" y1="20" x2="50" y2="80" strokeWidth="6" />
+    <path d="M50,35 C65,15 90,20 85,45 C80,60 65,55 50,65" />
+    <path d="M50,35 C35,15 10,20 15,45 C20,60 35,55 50,65" />
+    <path d="M50,65 C60,70 75,70 70,85 C65,95 55,85 50,75" />
+    <path d="M50,65 C40,70 25,70 30,85 C35,95 45,85 50,75" />
   </svg>
 );
 
 const DoodlePencil = ({ size = 36 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 40 120" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M8,100 L8,20 C8,15 32,15 32,20 L32,100 Z" />
-    <path d="M8,100 L20,115 L32,100" />
-    <line x1="8" y1="25" x2="32" y2="25" />
+  <svg width={size} height={size} viewBox="0 0 110 50" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="10,25 30,10 95,10 95,40 30,40" />
+    <polygon points="10,25 30,10 30,40" fill="currentColor" fillOpacity="0.15" />
+    <line x1="80" y1="10" x2="80" y2="40" />
+    <circle cx="18" cy="25" r="3" fill="currentColor" />
   </svg>
 );
 
-/* ─── Floating background doodle data ─── */
+const DoodleNote = ({ size = 36 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 90 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15,15 L60,15 L75,30 L75,85 L15,85 Z" />
+    <path d="M60,15 L60,30 L75,30" />
+    <line x1="28" y1="45" x2="62" y2="45" />
+    <line x1="28" y1="58" x2="62" y2="58" />
+    <line x1="28" y1="71" x2="48" y2="71" />
+  </svg>
+);
+
+const DoodleWave = ({ size = 36 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 120 40" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10,20 Q25,5 40,20 T70,20 T100,20" />
+    <path d="M10,30 Q25,15 40,30 T70,30 T100,30" opacity="0.5" />
+  </svg>
+);
+
 const BG_DOODLES = [
   // Left column
   { el: <DoodlePineapple size={72} />, pos: "top-[5%] left-[1%]", rot: "rotate-12", dur: 8, del: 0 },
@@ -236,6 +236,41 @@ export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
+
+  // Dark Mode State
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark") {
+        setIsDarkMode(true);
+        document.documentElement.classList.add("dark");
+      } else {
+        setIsDarkMode(false);
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const next = !isDarkMode;
+    setIsDarkMode(next);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", next ? "dark" : "light");
+      if (next) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+  };
+
+  // Auto-playing interactive demo states
+  const [isDemoMode, setIsDemoMode] = useState(true);
+  const [demoStep, setDemoStep] = useState(0);
+  const [cursorPos, setCursorPos] = useState({ x: "50%", y: "50%" });
+  const [cursorVisible, setCursorVisible] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -301,6 +336,104 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [fullText]);
 
+  // Simulated Auto-play Walkthrough Demo State Machine
+  useEffect(() => {
+    if (!isDemoMode) return;
+
+    let timer: any;
+    
+    const runStep = () => {
+      switch (demoStep) {
+        case 0:
+          // Cursor appears and moves to "Generar código" button
+          setCursorVisible(true);
+          setCursorPos({ x: "25%", y: "45%" });
+          timer = setTimeout(() => {
+            setDemoStep(1);
+          }, 1100);
+          break;
+        case 1:
+          // Simulate clicking "Generar código" and reveal code
+          const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          let c = "APX-";
+          for (let i = 0; i < 3; i++) c += chars[Math.floor(Math.random() * chars.length)];
+          c += "-";
+          for (let i = 0; i < 3; i++) c += chars[Math.floor(Math.random() * chars.length)];
+          setGeneratedCode(c);
+          setCopied(false);
+          
+          timer = setTimeout(() => {
+            setDemoStep(2);
+          }, 800);
+          break;
+        case 2:
+          // Move cursor to "Copiar" button and click
+          setCursorPos({ x: "40%", y: "76%" });
+          timer = setTimeout(() => {
+            setCopied(true);
+            setDemoStep(3);
+          }, 1100);
+          break;
+        case 3:
+          // Move to partner code input box
+          setCursorPos({ x: "75%", y: "45%" });
+          timer = setTimeout(() => {
+            setDemoStep(4);
+          }, 1100);
+          break;
+        case 4:
+          // Type the code character by character into input
+          const targetCode = "APX-782-901";
+          let currentStr = "";
+          let charIdx = 0;
+          const typingInterval = setInterval(() => {
+            currentStr += targetCode[charIdx];
+            setCode(currentStr);
+            charIdx++;
+            if (charIdx >= targetCode.length) {
+              clearInterval(typingInterval);
+              setDemoStep(5);
+            }
+          }, 140);
+          break;
+        case 5:
+          // Move to "Vincular Jardín" button
+          setCursorPos({ x: "75%", y: "76%" });
+          timer = setTimeout(() => {
+            setDemoStep(6);
+          }, 1100);
+          break;
+        case 6:
+          // Trigger linking screen (fade fake cursor out)
+          setCursorVisible(false);
+          setIsLinking(true);
+          timer = setTimeout(() => {
+            setIsLinking(false);
+            setIsLinked(true);
+            setDemoStep(7);
+          }, 2400);
+          break;
+        case 7:
+          // Show successfully linked garden state for 5.5s then reset
+          timer = setTimeout(() => {
+            setCode("");
+            setGeneratedCode("");
+            setCopied(false);
+            setIsLinked(false);
+            setIsLinking(false);
+            setDemoStep(0);
+          }, 5500);
+          break;
+      }
+    };
+
+    runStep();
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [demoStep, isDemoMode]);
+
   const handleGenerateCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let c = "APX-";
@@ -317,8 +450,8 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleLink = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLink = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (code.trim().length >= 6) {
       setIsLinking(true);
       setTimeout(() => { setIsLinking(false); setIsLinked(true); }, 2000);
@@ -326,14 +459,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-mono selection:bg-royal-blue selection:text-white relative">
+    <div className={`min-h-screen flex flex-col font-mono selection:bg-royal-blue selection:text-white relative transition-colors duration-300 ${
+      isDarkMode ? "bg-zinc-950 text-zinc-100" : "bg-[#f1f1f4] text-[#1c1c24]"
+    }`}>
 
       {/* ── Background Floating Doodles ── */}
       <div className="fixed inset-0 pointer-events-none select-none" aria-hidden style={{ zIndex: 0 }}>
         {BG_DOODLES.map((d, i) => (
           <motion.div
             key={i}
-            className={`absolute text-royal-blue/[0.13] ${d.pos} ${d.rot}`}
+            className={`absolute ${d.pos} ${d.rot} transition-colors duration-300 ${
+              isDarkMode ? "text-white/[0.04]" : "text-royal-blue/[0.13]"
+            }`}
             animate={{ y: [0, -20, 0], x: [0, 8, 0], rotate: [0, 5, -5, 0] }}
             transition={{ repeat: Infinity, duration: d.dur, delay: d.del, ease: "easeInOut" }}
           >
@@ -343,7 +480,9 @@ export default function Home() {
       </div>
 
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 w-full backdrop-blur-sm bg-background/90 border-b border-royal-blue/10">
+      <header className={`sticky top-0 z-50 w-full backdrop-blur-sm transition-colors duration-300 border-b ${
+        isDarkMode ? "bg-zinc-950/90 border-zinc-800" : "bg-[#f1f1f4]/90 border-royal-blue/10"
+      }`}>
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-6">
           {/* Logo */}
           <div className="flex items-center gap-3 shrink-0">
@@ -351,7 +490,9 @@ export default function Home() {
               animate={{ rotate: [0, 6, -6, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
               whileHover={{ scale: 1.15, rotate: 12 }}
-              className="text-royal-blue cursor-pointer shrink-0"
+              className={`cursor-pointer shrink-0 transition-colors duration-300 ${
+                isDarkMode ? "text-zinc-200" : "text-royal-blue"
+              }`}
             >
               <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-14 h-14">
                 <path d="M50,85 C51,70 49,55 50,45" />
@@ -363,27 +504,51 @@ export default function Home() {
                 <path d="M44,31 C38,20 50,15 50,27" />
               </svg>
             </motion.div>
-            <span className="font-doodle text-3xl font-bold tracking-tight text-royal-blue lowercase">apaxho</span>
+            <span className={`font-doodle text-3xl font-bold tracking-tight lowercase transition-colors duration-300 ${
+              isDarkMode ? "text-zinc-200" : "text-royal-blue"
+            }`}>apaxho</span>
           </div>
 
           {/* Nav */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-royal-blue/60">
-            <a href="#como-funciona" className="hover:text-royal-blue transition-colors">{t("navHowItWorks")}</a>
-            <a href="#filosofia" className="hover:text-royal-blue transition-colors">{t("navPhilosophy")}</a>
+          <nav className={`hidden md:flex items-center gap-8 text-sm font-bold transition-colors duration-300 ${
+            isDarkMode ? "text-zinc-400" : "text-royal-blue/60"
+          }`}>
+            <a href="#como-funciona" className={`transition-colors ${isDarkMode ? "hover:text-white" : "hover:text-royal-blue"}`}>{t("navHowItWorks")}</a>
+            <a href="#filosofia" className={`transition-colors ${isDarkMode ? "hover:text-white" : "hover:text-royal-blue"}`}>{t("navPhilosophy")}</a>
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Theme Toggle Button */}
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={toggleDarkMode}
+              className={`p-2.5 rounded-xl border-2 transition-all text-sm font-bold flex items-center justify-center shadow-sm h-10 w-10 ${
+                isDarkMode 
+                  ? "border-zinc-800 bg-zinc-900 text-yellow-400 hover:bg-zinc-800" 
+                  : "border-royal-blue/25 bg-white text-royal-blue hover:bg-royal-blue/8"
+              }`}
+            >
+              {isDarkMode ? "☀️" : "🌙"}
+            </motion.button>
+
+            {/* Language Button */}
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => setLocale(locale === "es" ? "en" : "es")}
               title={locale === "es" ? "Switch to English" : "Cambiar a Español"}
-              className="flex items-center gap-2.5 px-4.5 py-2.5 rounded-xl text-sm font-bold text-royal-blue border-2 border-royal-blue/25 hover:bg-royal-blue/8 hover:border-royal-blue/50 transition-all shadow-sm"
+              className={`flex items-center gap-2.5 px-4.5 py-2.5 rounded-xl text-sm font-bold border-2 transition-all shadow-sm h-10 ${
+                isDarkMode 
+                  ? "border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800" 
+                  : "border-royal-blue/25 bg-white text-royal-blue hover:bg-royal-blue/8 hover:border-royal-blue/50"
+              }`}
             >
               <DoodleGlobe size={18} />
               <span>{locale.toUpperCase()}</span>
             </motion.button>
+            
             {user ? (
               <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                 <Link
@@ -415,7 +580,9 @@ export default function Home() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/50 border-r border-royal-blue/10 pr-2 py-8"
+          className={`hidden lg:flex lg:col-span-1 flex-col gap-6 border-r pr-2 py-8 transition-colors duration-300 ${
+            isDarkMode ? "text-zinc-400 border-zinc-800" : "text-royal-blue/50 border-royal-blue/10"
+          }`}
         >
           {[
             { href: "https://egobmz.vercel.app", icon: <DoodleWeb size={28} />, label: "Web Personal" },
@@ -430,7 +597,9 @@ export default function Home() {
               rel="noopener noreferrer"
               title={label}
               whileHover={{ scale: 1.25, x: 5 }}
-              className="p-2 rounded-xl hover:bg-royal-blue/8 hover:text-royal-blue w-fit transition-all"
+              className={`p-2 rounded-xl w-fit transition-all ${
+                isDarkMode ? "hover:bg-zinc-800 hover:text-white" : "hover:bg-royal-blue/8 hover:text-royal-blue"
+              }`}
             >
               {icon}
             </motion.a>
@@ -444,7 +613,11 @@ export default function Home() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2.5 bg-lavender/40 text-lavender-text px-4 py-2.5 rounded-full w-fit text-sm font-bold border border-lavender/60"
+            className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full w-fit text-sm font-bold border transition-colors duration-300 ${
+              isDarkMode 
+                ? "bg-zinc-900/60 text-zinc-300 border-zinc-800" 
+                : "bg-lavender/40 text-lavender-text border-lavender/60"
+            }`}
           >
             <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="shrink-0">🌸</motion.span>
             <span className="font-mono whitespace-nowrap">
@@ -464,7 +637,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.25] text-royal-blue font-mono tracking-tight pb-2"
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.25] font-mono tracking-tight pb-2 transition-colors duration-300 ${
+              isDarkMode ? "text-zinc-100" : "text-royal-blue"
+            }`}
           >
             {t("heroTitle")}
           </motion.h1>
@@ -474,7 +649,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base md:text-lg text-foreground/75 leading-relaxed max-w-xl"
+            className={`text-base md:text-lg leading-relaxed max-w-xl transition-colors duration-300 ${
+              isDarkMode ? "text-zinc-400" : "text-foreground/75"
+            }`}
           >
             {t("heroSubtitle")}
           </motion.p>
@@ -485,8 +662,33 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.3 }}
-            className="bg-white/80 backdrop-blur-md border-2 border-royal-blue/20 rounded-2xl p-6 shadow-xl shadow-royal-blue/5 flex flex-col gap-6 max-w-xl min-h-[220px] justify-center"
+            className={`border-2 rounded-2xl p-6 shadow-xl flex flex-col gap-6 max-w-xl min-h-[220px] justify-center relative overflow-hidden transition-all duration-300 ${
+              isDarkMode 
+                ? "bg-zinc-900 border-zinc-800 shadow-zinc-950/20" 
+                : "bg-white/80 border-royal-blue/20 shadow-royal-blue/5"
+            }`}
           >
+            {/* Auto-play demo mode tag */}
+            {isDemoMode && (
+              <span className={`absolute top-2.5 right-3 text-[9px] uppercase tracking-wider font-bold select-none z-20 transition-colors ${
+                isDarkMode ? "text-zinc-650" : "text-royal-blue/35"
+              }`}>
+                demo auto-play
+              </span>
+            )}
+
+            {/* Fake cursor flower overlay (Demo mode only) */}
+            {isDemoMode && cursorVisible && (
+              <motion.div
+                animate={{ left: cursorPos.x, top: cursorPos.y, opacity: cursorVisible ? 1 : 0 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="absolute pointer-events-none z-30 text-royal-blue text-lg select-none"
+                style={{ transform: "translate(-10px, -10px)" }}
+              >
+                🌸
+              </motion.div>
+            )}
+
             <AnimatePresence mode="wait">
               {isLinking ? (
                 <motion.div
@@ -531,33 +733,93 @@ export default function Home() {
                   className="flex flex-col gap-5"
                 >
                   <div className="flex flex-col gap-1.5">
-                    <h3 className="text-sm font-bold text-royal-blue uppercase tracking-wider">{t("consoleStep1Title")}</h3>
-                    <p className="text-sm text-foreground/65">{t("consoleStep1Desc")}</p>
+                    <h3 className={`text-sm font-bold uppercase tracking-wider transition-colors ${
+                      isDarkMode ? "text-zinc-200" : "text-royal-blue"
+                    }`}>{t("consoleStep1Title")}</h3>
+                    <p className={`text-sm transition-colors ${isDarkMode ? "text-zinc-450" : "text-foreground/65"}`}>{t("consoleStep1Desc")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
-                      <button type="button" onClick={handleGenerateCode}
-                        className="w-full bg-white hover:bg-royal-blue/5 border border-royal-blue/20 text-royal-blue text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-[0.97]"
-                      >{t("consoleBtnGenerate")}</button>
+                    {/* Generar Código Panel */}
+                    <div className={`flex flex-col gap-3 p-4 rounded-xl border transition-colors ${
+                      isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-[#f8f8fa] border-royal-blue/5"
+                    }`}>
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          setIsDemoMode(false);
+                          setCursorVisible(false);
+                          handleGenerateCode();
+                        }}
+                        className={`w-full text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-[0.97] border ${
+                          isDarkMode 
+                            ? "bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            : "bg-white border-royal-blue/20 text-royal-blue hover:bg-royal-blue/5"
+                        }`}
+                      >
+                        {t("consoleBtnGenerate")}
+                      </button>
                       {generatedCode && (
-                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center justify-between bg-white border border-royal-blue/10 rounded-lg px-3 py-2"
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.95 }} 
+                          animate={{ opacity: 1, scale: 1 }}
+                          className={`flex items-center justify-between border rounded-lg px-3 py-2 ${
+                            isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-royal-blue/10"
+                          }`}
                         >
                           <span className="font-mono text-xs font-bold text-royal-blue tracking-widest">{generatedCode}</span>
-                          <button type="button" onClick={handleCopy} className="text-[10px] uppercase font-bold text-lavender-text hover:underline ml-2 shrink-0">
+                          <button 
+                            type="button" 
+                            onClick={() => {
+                              setIsDemoMode(false);
+                              setCursorVisible(false);
+                              handleCopy();
+                            }} 
+                            className="text-[10px] uppercase font-bold text-lavender-text hover:underline ml-2 shrink-0"
+                          >
                             {copied ? t("consoleBtnCopied") : t("consoleBtnCopy")}
                           </button>
                         </motion.div>
                       )}
                     </div>
-                    <form onSubmit={handleLink} className="flex flex-col gap-3 p-4 bg-[#f8f8fa] rounded-xl border border-royal-blue/5">
-                      <input type="text" placeholder={t("consolePlaceholder")} value={code}
-                        onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        className="w-full bg-white border border-royal-blue/20 text-royal-blue placeholder-royal-blue/30 text-sm font-mono text-center font-bold py-2 px-4 rounded-lg outline-none focus:border-royal-blue transition-colors"
+
+                    {/* Vincular Código Form */}
+                    <form 
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        setIsDemoMode(false);
+                        setCursorVisible(false);
+                        handleLink(e);
+                      }} 
+                      className={`flex flex-col gap-3 p-4 rounded-xl border transition-colors ${
+                        isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-[#f8f8fa] border-royal-blue/5"
+                      }`}
+                    >
+                      <input 
+                        type="text" 
+                        placeholder={t("consolePlaceholder")} 
+                        value={code}
+                        onFocus={() => {
+                          setIsDemoMode(false);
+                          setCursorVisible(false);
+                        }}
+                        onChange={(e) => {
+                          setIsDemoMode(false);
+                          setCursorVisible(false);
+                          setCode(e.target.value.toUpperCase());
+                        }}
+                        className={`w-full text-sm font-mono text-center font-bold py-2 px-4 rounded-lg outline-none border transition-colors ${
+                          isDarkMode 
+                            ? "bg-zinc-900 border-zinc-700 text-white placeholder-zinc-650 focus:border-royal-blue" 
+                            : "bg-white border-royal-blue/20 text-royal-blue placeholder-royal-blue/30 focus:border-royal-blue"
+                        }`}
                       />
-                      <button type="submit" disabled={code.trim().length < 6}
+                      <button 
+                        type="submit" 
+                        disabled={code.trim().length < 6}
                         className="w-full bg-royal-blue hover:bg-royal-blue/90 disabled:opacity-40 text-white text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-md active:scale-[0.97]"
-                      >{t("consoleBtnLink")}</button>
+                      >
+                        {t("consoleBtnLink")}
+                      </button>
                     </form>
                   </div>
                 </motion.div>
@@ -582,7 +844,15 @@ export default function Home() {
                     <h3 className="font-doodle text-xl font-bold text-royal-blue">{t("consoleSuccessTitle")}</h3>
                     <p className="text-sm text-foreground/65">{t("consoleSuccessDesc")}</p>
                   </div>
-                  <button onClick={() => { setIsLinked(false); setCode(""); }} className="text-xs text-royal-blue/50 hover:text-royal-blue hover:underline mt-1">
+                  <button 
+                    onClick={() => { 
+                      setIsLinked(false); 
+                      setCode(""); 
+                      setIsDemoMode(false);
+                      setCursorVisible(false);
+                    }} 
+                    className="text-xs text-royal-blue/50 hover:text-royal-blue hover:underline mt-1"
+                  >
                     {t("consoleBtnTryAgain")}
                   </button>
                 </motion.div>
@@ -611,21 +881,25 @@ export default function Home() {
             >{d.el}</motion.div>
           ))}
 
-          {/* Phone */}
+          {/* Phone Frame */}
           <motion.div
             initial={{ opacity: 0, x: 50, rotate: 2 }}
             animate={{ opacity: 1, x: 0, rotate: 0 }}
             transition={{ type: "spring", stiffness: 45, damping: 15, delay: 0.2 }}
-            className="w-[300px] h-[610px] rounded-[48px] bg-slate-900 p-3.5 shadow-2xl border-4 border-slate-800/80 relative overflow-hidden"
+            className={`w-[300px] h-[610px] rounded-[48px] border-4 p-3.5 shadow-2xl relative overflow-hidden transition-colors duration-300 ${
+              isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-slate-900 border-slate-800/80"
+            }`}
           >
-            {/* Dynamic Island */}
+            {/* Notch / Dynamic Island */}
             <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-20 flex items-center justify-between px-4">
               <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="w-1.5 h-1.5 bg-royal-blue rounded-full" />
               <span className="w-1 h-1 bg-white/20 rounded-full" />
             </div>
 
             {/* Screen */}
-            <div className="w-full h-full rounded-[38px] bg-background p-5 pt-10 flex flex-col justify-between select-none relative overflow-hidden">
+            <div className={`w-full h-full rounded-[38px] p-5 pt-10 flex flex-col justify-between select-none relative overflow-hidden transition-colors duration-300 ${
+              isDarkMode ? "bg-zinc-950 text-zinc-100" : "bg-background text-[#1c1c24]"
+            }`}>
               {/* Status bar */}
               <div className="flex justify-between items-center text-[10px] font-bold text-royal-blue/55 px-1 pt-1">
                 <span>16:31</span>
@@ -638,12 +912,16 @@ export default function Home() {
               {/* Header inside phone */}
               <div className="flex justify-between items-start mt-5 px-1 relative z-10">
                 <div className="flex flex-col">
-                  <span className="font-doodle text-lg font-bold text-royal-blue leading-tight">Ego & Sharon</span>
+                  <span className={`font-doodle text-lg font-bold leading-tight transition-colors duration-300 ${
+                    isDarkMode ? "text-zinc-200" : "text-royal-blue"
+                  }`}>Diego & Sharon</span>
                   <span className="font-doodle text-xs font-bold text-royal-blue/70 leading-none lowercase tracking-wide">
                     {locale === "es" ? "el jardín" : "our garden"}
                   </span>
                 </div>
-                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 text-royal-blue">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={`w-7 h-7 transition-colors duration-300 ${
+                  isDarkMode ? "text-zinc-200" : "text-royal-blue"
+                }`}>
                   <path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="8" />
                   <path d="M50,27 C50,15 62,25 56,31" /><path d="M58,35 C70,30 65,45 57,39" />
                   <path d="M54,41 C58,53 46,49 48,42" /><path d="M46,39 C34,45 30,30 42,35" />
@@ -652,7 +930,9 @@ export default function Home() {
               </div>
 
               {/* Garden Grid — doodles inspired by reference image 4 */}
-              <div className="flex-1 my-3 bg-white/60 border-2 border-royal-blue/15 rounded-3xl p-4 relative overflow-hidden flex flex-col justify-between">
+              <div className={`flex-1 my-3 border-2 rounded-3xl p-4 relative overflow-hidden flex flex-col justify-between transition-colors duration-300 ${
+                isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-white/60 border-royal-blue/15"
+              }`}>
 
                 {/* Floating garden clouds */}
                 <div className="absolute top-2 left-0 right-0 h-6 overflow-hidden pointer-events-none opacity-40">
@@ -660,7 +940,7 @@ export default function Home() {
                     animate={{ x: [-20, 120, -20] }}
                     transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
                     viewBox="0 0 100 50"
-                    className="w-10 h-6 text-royal-blue/40 absolute left-2"
+                    className={`w-10 h-6 absolute left-2 transition-colors ${isDarkMode ? "text-zinc-650" : "text-royal-blue/40"}`}
                   >
                     <path d="M10,35 C10,20 30,10 45,20 C55,10 75,15 80,30 C90,30 95,40 80,45 L20,45 Z" fill="none" stroke="currentColor" strokeWidth="4" />
                   </motion.svg>
@@ -668,14 +948,14 @@ export default function Home() {
                     animate={{ x: [120, -20, 120] }}
                     transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                     viewBox="0 0 100 50"
-                    className="w-8 h-5 text-royal-blue/40 absolute right-4 top-1"
+                    className={`w-8 h-5 absolute right-4 top-1 transition-colors ${isDarkMode ? "text-zinc-650" : "text-royal-blue/40"}`}
                   >
                     <path d="M10,35 C10,20 30,10 45,20 C55,10 75,15 80,30 C90,30 95,40 80,45 L20,45 Z" fill="none" stroke="currentColor" strokeWidth="4" />
                   </motion.svg>
                 </div>
 
                 {/* Grass ground lines at the bottom */}
-                <div className="absolute bottom-0 left-0 right-0 h-10 pointer-events-none text-royal-blue/20 flex items-end">
+                <div className={`absolute bottom-0 left-0 right-0 h-10 pointer-events-none flex items-end transition-colors ${isDarkMode ? "text-zinc-800" : "text-royal-blue/20"}`}>
                   <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full fill-none stroke-current" strokeWidth="2.5">
                     <path d="M0,20 C10,12 15,18 20,20 C30,15 35,18 40,20 C50,12 55,15 60,20 C70,14 75,18 80,20 C90,12 95,15 100,20" />
                   </svg>
@@ -696,7 +976,7 @@ export default function Home() {
                       animate={{ rotate: i % 2 === 0 ? [-2, 2, -2] : [1, -2, 1], y: [0, -2, 0] }}
                       transition={{ repeat: Infinity, duration: item.dur, delay: item.del, ease: "easeInOut" }}
                       whileHover={{ scale: 1.18 }} whileTap={{ scale: 0.92 }}
-                      className={`text-royal-blue cursor-pointer ${item.span === 2 ? "col-span-2" : ""}`}
+                      className={`cursor-pointer transition-colors ${isDarkMode ? "text-zinc-300 hover:text-white" : "text-royal-blue"} ${item.span === 2 ? "col-span-2" : ""}`}
                     >{item.el}</motion.div>
                   ))}
                 </div>
@@ -705,102 +985,104 @@ export default function Home() {
                 <motion.div
                   whileHover={{ scale: 1.06, rotate: [0, 1, -1, 0] }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-full flex flex-col items-center cursor-pointer text-royal-blue z-10 select-none pb-1"
+                  className={`w-full flex flex-col items-center cursor-pointer z-10 select-none pb-1 transition-colors ${
+                    isDarkMode ? "text-zinc-300" : "text-royal-blue"
+                  }`}
                 >
-                  <div className="border-2 border-royal-blue px-3 py-1 rounded-xl bg-white font-bold text-xs shadow-sm flex items-center gap-1.5 hover:bg-royal-blue/5 transition-colors">
+                  <div className={`border-2 px-3 py-1 rounded-xl font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors ${
+                    isDarkMode ? "bg-zinc-800 border-zinc-700 hover:bg-zinc-750 text-zinc-200" : "bg-white border-royal-blue text-royal-blue hover:bg-royal-blue/5"
+                  }`}>
                     <span className="text-sm font-bold">+</span>
                     <span className="font-mono text-[10px] uppercase tracking-wider">{locale === "es" ? "Plantar" : "Plant"}</span>
                   </div>
-                  <div className="w-1 h-2 bg-royal-blue" />
+                  <div className={`w-1 h-2 transition-colors ${isDarkMode ? "bg-zinc-700" : "bg-royal-blue"}`} />
                 </motion.div>
               </div>
 
               {/* Bottom Nav */}
-              <div className="flex justify-around items-center border-t border-royal-blue/10 pt-3 pb-2 text-royal-blue/50 text-[10px] font-bold z-10">
-                <span className="text-royal-blue underline decoration-2 underline-offset-4">{locale === "es" ? "Jardín" : "Garden"}</span>
+              <div className={`flex justify-around items-center border-t pt-3 pb-2 text-[10px] font-bold z-10 transition-colors duration-300 ${
+                isDarkMode ? "border-zinc-800 text-zinc-500" : "border-royal-blue/10 text-royal-blue/50"
+              }`}>
+                <span className={`underline decoration-2 underline-offset-4 ${isDarkMode ? "text-zinc-200" : "text-royal-blue"}`}>{locale === "es" ? "Jardín" : "Garden"}</span>
                 <span>{t("navDiary")}</span>
                 <span>{t("navSettings")}</span>
               </div>
             </div>
           </motion.div>
         </div>
+
       </main>
 
-      {/* ── HOW IT WORKS ── */}
-      <section id="como-funciona" className="w-full max-w-7xl mx-auto px-6 py-24 border-t border-royal-blue/10">
-        <div className="flex flex-col items-center text-center gap-4 mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-doodle text-3xl md:text-4xl font-bold text-royal-blue"
-          >{t("featuresTitle")}</motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-foreground/70 max-w-md text-base"
-          >{t("featuresSubtitle")}</motion.p>
+      {/* ── SECTION: COMO FUNCIONA ── */}
+      <section id="como-funciona" className="py-20 md:py-28 relative z-10 w-full max-w-7xl mx-auto px-6 border-t border-royal-blue/10">
+        <div className="text-center max-w-2xl mx-auto flex flex-col gap-3 mb-16">
+          <h2 className={`text-3xl md:text-4xl font-bold font-mono transition-colors duration-300 ${isDarkMode ? "text-zinc-100" : "text-royal-blue"}`}>{t("featuresTitle")}</h2>
+          <p className={`text-sm md:text-base transition-colors duration-300 ${isDarkMode ? "text-zinc-400" : "text-foreground/70"}`}>{t("featuresSubtitle")}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            {
-              icon: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10"><path d="M30,50 C10,25 40,25 50,50 C60,75 90,75 70,50 C50,25 20,75 50,50 Z" /></svg>,
-              title: t("feature1Title"), desc: t("feature1Desc"), delay: 0.1,
-            },
-            {
-              icon: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10"><rect x="25" y="25" width="50" height="20" rx="3" transform="rotate(45 50 50)" /><path d="M68,32 L80,20 L68,20 Z" transform="rotate(45 50 50)" /><path d="M25,45 L20,40 L25,35 Z" fill="currentColor" transform="rotate(45 50 50)" /></svg>,
-              title: t("feature2Title"), desc: t("feature2Desc"), delay: 0.2,
-            },
-            {
-              icon: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10"><path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="8" /><path d="M50,27 C50,15 62,25 56,31" /><path d="M58,35 C70,30 65,45 57,39" /><path d="M54,41 C58,53 46,49 48,42" /><path d="M46,39 C34,45 30,30 42,35" /><path d="M44,31 C38,20 50,15 50,27" /></svg>,
-              title: t("feature3Title"), desc: t("feature3Desc"), delay: 0.3,
-            },
-          ].map((card, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, delay: card.delay }}
-              whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(28,13,203,0.08)" }}
-              className="bg-white border-2 border-royal-blue/10 rounded-2xl p-8 shadow-md transition-all duration-300 flex flex-col items-center text-center gap-6"
+            { title: t("feature1Title"), desc: t("feature1Desc"), step: "01", icon: "🔗" },
+            { title: t("feature2Title"), desc: t("feature2Desc"), step: "02", icon: "✏️" },
+            { title: t("feature3Title"), desc: t("feature3Desc"), step: "03", icon: "🌸" }
+          ].map((feat, index) => (
+            <motion.div
+              key={feat.title}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+              whileHover={{ y: -5 }}
+              className={`border-2 rounded-3xl p-8 shadow-lg flex flex-col justify-between gap-6 relative group transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-zinc-900 border-zinc-800 shadow-zinc-950/20 text-zinc-100" 
+                  : "bg-white/70 border-royal-blue/15 shadow-royal-blue/5 text-[#1c1c24]"
+              }`}
             >
-              <motion.div
-                animate={{ rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 4, delay: i * 0.8, ease: "easeInOut" }}
-                className="w-16 h-16 rounded-full bg-royal-blue/5 flex items-center justify-center text-royal-blue"
-              >{card.icon}</motion.div>
+              <div className="absolute -top-5 -left-3 font-doodle text-5xl font-extrabold text-royal-blue/8 opacity-25 group-hover:opacity-40 transition-opacity">
+                {feat.step}
+              </div>
+              <div className="text-3xl">{feat.icon}</div>
               <div className="flex flex-col gap-2">
-                <h3 className="font-mono font-bold text-lg text-royal-blue">{card.title}</h3>
-                <p className="text-sm text-foreground/70 leading-relaxed">{card.desc}</p>
+                <h3 className={`font-doodle text-lg font-bold transition-colors ${isDarkMode ? "text-zinc-200" : "text-royal-blue"}`}>{feat.title}</h3>
+                <p className={`text-xs md:text-sm font-mono leading-relaxed transition-colors ${isDarkMode ? "text-zinc-400" : "text-foreground/75"}`}>{feat.desc}</p>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* ── PHILOSOPHY ── */}
-      <section id="filosofia" className="w-full bg-white border-t border-b border-royal-blue/10 py-24">
+      {/* ── SECTION: FILOSOFIA ── */}
+      <section id="filosofia" className="py-20 md:py-28 relative z-10 w-full max-w-5xl mx-auto px-6 text-center border-t border-royal-blue/10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center gap-8"
+          className={`border-2 rounded-[40px] p-8 md:p-14 shadow-xl flex flex-col gap-6 items-center relative overflow-hidden transition-all duration-300 ${
+            isDarkMode 
+              ? "bg-zinc-900/50 border-zinc-850 shadow-zinc-950/20" 
+              : "bg-lavender/30 border-royal-blue/20 shadow-royal-blue/5"
+          }`}
         >
-          <motion.div animate={{ rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 4 }} className="w-14 h-14 text-royal-blue">
-            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-              <circle cx="50" cy="35" r="8" />
-              <path d="M50,27 C50,15 62,25 56,31" />
-              <path d="M58,35 C70,30 65,45 57,39" />
-              <path d="M54,41 C58,53 46,49 48,42" />
-              <path d="M46,39 C34,45 30,30 42,35" />
-              <path d="M44,31 C38,20 50,15 50,27" />
-            </svg>
-          </motion.div>
-          <h2 className="font-doodle text-3xl md:text-4xl font-bold text-royal-blue">
-            &ldquo;{t("philosophyTitle")}&rdquo;
+          <div className="absolute top-[8%] left-[8%] text-royal-blue/15 rotate-12"><StarIcon size={36} /></div>
+          <div className="absolute bottom-[8%] right-[8%] text-royal-blue/15 -rotate-12"><HeartIcon size={36} /></div>
+
+          <span className={`text-xs uppercase tracking-widest font-bold transition-colors ${isDarkMode ? "text-zinc-500" : "text-royal-blue/60"}`}>{t("philosophyTitle")}</span>
+          <h2 className={`text-3xl md:text-4xl font-bold font-mono max-w-xl leading-snug transition-colors ${isDarkMode ? "text-zinc-200" : "text-royal-blue"}`}>
+            {locale === "es" ? "Recordando que la vida es un instante" : "Remembering that life is a moment"}
           </h2>
-          <p className="text-lg leading-relaxed text-foreground/75 max-w-2xl font-mono">
+          <p className={`text-xs md:text-sm font-mono leading-relaxed max-w-2xl transition-colors ${isDarkMode ? "text-zinc-400" : "text-foreground/75"}`}>
             {t("philosophyDesc")}
           </p>
+
+          <div className="w-12 h-0.5 bg-royal-blue/25 my-2" />
+          
           <motion.span
             animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2.5 }}
-            className="font-doodle text-2xl font-semibold text-royal-blue tracking-wide"
+            className={`font-doodle text-2xl font-semibold tracking-wide transition-colors duration-300 ${
+              isDarkMode ? "text-zinc-200" : "text-royal-blue"
+            }`}
           >
             Diego &amp; Sharon ♡
           </motion.span>
@@ -808,76 +1090,30 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="w-full max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-royal-blue/10 text-xs text-royal-blue/50 font-bold relative z-20">
-        <div className="flex flex-col gap-2 items-center md:items-start">
-          <span>© {new Date().getFullYear()} {t("footerMadeWith")}</span>
-          {/* Mobile socials (visible on md and below, hidden on lg because sidebar has them) */}
-          <div className="flex gap-4 lg:hidden mt-1">
-            <a href="https://egobmz.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">Web</a>
-            <span>•</span>
-            <a href="https://www.linkedin.com/in/egobmz/" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">LinkedIn</a>
-            <span>•</span>
-            <a href="https://github.com/EgoBMZ" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">GitHub</a>
-            <span>•</span>
-            <a href="https://instagram.com/egobmz" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">Instagram</a>
+      <footer className={`w-full border-t relative z-10 py-10 transition-colors duration-300 ${
+        isDarkMode ? "bg-zinc-950/80 border-zinc-900" : "bg-white/70 border-royal-blue/10"
+      }`}>
+        <div className={`max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-bold transition-colors duration-300 ${
+          isDarkMode ? "text-zinc-500" : "text-royal-blue/60"
+        }`}>
+          <div>
+            © {new Date().getFullYear()} {t("footerMadeWith")}
           </div>
-        </div>
 
-        <div className="flex gap-6">
-          <Link href="/privacidad" className="hover:text-royal-blue hover:underline transition-colors">
-            {t("footerPrivacy")}
-          </Link>
-          <Link href="/terminos" className="hover:text-royal-blue hover:underline transition-colors">
-            {t("footerTerms")}
-          </Link>
-          <a href="https://egobmz.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue hover:underline transition-colors">
-            {t("footerContact")}
-          </a>
+          <div className="flex gap-6">
+            <Link href="/privacidad" className={`transition-colors ${isDarkMode ? "hover:text-white" : "hover:text-royal-blue hover:underline"}`}>
+              {t("footerPrivacy")}
+            </Link>
+            <Link href="/terminos" className={`transition-colors ${isDarkMode ? "hover:text-white" : "hover:text-royal-blue hover:underline"}`}>
+              {t("footerTerms")}
+            </Link>
+            <a href="https://egobmz.vercel.app" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? "hover:text-white" : "hover:text-royal-blue hover:underline"}`}>
+              {t("footerContact")}
+            </a>
+          </div>
         </div>
       </footer>
 
-      {/* ── Global Custom Cursor Styles ── */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @media (pointer: fine) {
-          .custom-cursor-active, .custom-cursor-active * {
-            cursor: none !important;
-          }
-        }
-      `}} />
-
-      {/* ── Custom Cursor Follower ── */}
-      {!isMobile && (
-        <motion.div
-          className="fixed pointer-events-none z-50 text-royal-blue shrink-0 mix-blend-multiply"
-          animate={{
-            x: mousePos.x - (isHovered ? 24 : 16),
-            y: mousePos.y - (isHovered ? 24 : 16),
-            scale: isHovered ? 1.5 : 1,
-            rotate: isHovered ? 45 : 0,
-          }}
-          transition={{ type: "spring", stiffness: 350, damping: 25, mass: 0.5 }}
-        >
-          {isHovered ? (
-            <svg width="48" height="48" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
-              <path d="M50,85 C51,70 49,55 50,45" />
-              <circle cx="50" cy="35" r="8" className="fill-royal-blue/20" />
-              <path d="M50,27 C50,15 62,25 56,31" />
-              <path d="M58,35 C70,30 65,45 57,39" />
-              <path d="M54,41 C58,53 46,49 48,42" />
-              <path d="M46,39 C34,45 30,30 42,35" />
-              <path d="M44,31 C38,20 50,15 50,27" />
-            </svg>
-          ) : (
-            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
-              <path d="M50,85 C50,60 50,45 50,35" />
-              <path d="M50,55 C35,45 30,30 50,35" />
-              <path d="M50,45 C65,35 70,20 50,25" />
-              <circle cx="50" cy="35" r="4.5" fill="currentColor" />
-            </svg>
-          )}
-        </motion.div>
-      )}
     </div>
   );
 }

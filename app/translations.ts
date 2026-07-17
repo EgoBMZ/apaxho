@@ -21,7 +21,7 @@ export const translations = {
     consoleLinkingDesc: "Alineando estrellas para Diego & Sharon...",
     
     consoleSuccessTitle: "¡Conexión establecida!",
-    consoleSuccessDesc: "El jardín de @EgoBMZ & Sharon ha sido creado con éxito. ¡Listo para plantar la primera racha!",
+    consoleSuccessDesc: "El jardín de Diego & Sharon ha sido creado con éxito. ¡Listo para plantar la primera racha!",
     consoleBtnTryAgain: "Volver a intentar",
     
     featuresTitle: "¿Cómo se cultiva tu jardín?",
@@ -89,7 +89,7 @@ export const translations = {
     consoleLinkingDesc: "Aligning stars for Diego & Sharon...",
     
     consoleSuccessTitle: "Connection established!",
-    consoleSuccessDesc: "The garden of @EgoBMZ & Sharon has been successfully created. Ready to plant the first streak!",
+    consoleSuccessDesc: "The garden of Diego & Sharon has been successfully created. Ready to plant the first streak!",
     consoleBtnTryAgain: "Try again",
     
     featuresTitle: "How does your garden grow?",
