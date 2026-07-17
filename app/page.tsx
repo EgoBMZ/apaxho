@@ -222,6 +222,48 @@ export default function Home() {
   const [isLinking, setIsLinking] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Check if device is desktop / fine pointer
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    setIsMobile(!mediaQuery.matches);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isInteractive = target.closest("a, button, [role='button'], input, select, textarea, .cursor-pointer");
+      setIsHovered(!!isInteractive);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseover", handleMouseOver);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isMobile) {
+      document.body.classList.add("custom-cursor-active");
+    } else {
+      document.body.classList.remove("custom-cursor-active");
+    }
+    return () => {
+      document.body.classList.remove("custom-cursor-active");
+    };
+  }, [isMobile]);
+
   const [locale, setLocale] = useState<"es" | "en">("es");
 
   useEffect(() => {
@@ -513,7 +555,7 @@ export default function Home() {
                     <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} className="text-royal-blue">
                       <HeartIcon size={32} />
                     </motion.div>
-                    {[{ y: [-8,-28], x: [0,0], d: 0 }, { y: [-8,-22], x: [8,18], d: 0.4 }, { y: [-8,-24], x: [-8,-18], d: 0.8 }].map((p, i) => (
+                    {[{ y: [-8, -28], x: [0, 0], d: 0 }, { y: [-8, -22], x: [8, 18], d: 0.4 }, { y: [-8, -24], x: [-8, -18], d: 0.8 }].map((p, i) => (
                       <motion.span key={i} animate={{ y: p.y, x: p.x, opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1.4, delay: p.d }} className="absolute text-[11px] pointer-events-none">❤️</motion.span>
                     ))}
                   </div>
@@ -575,10 +617,12 @@ export default function Home() {
               </div>
 
               {/* Header inside phone */}
-              <div className="flex justify-between items-start mt-5 px-1">
+              <div className="flex justify-between items-start mt-5 px-1 relative z-10">
                 <div className="flex flex-col">
                   <span className="font-doodle text-lg font-bold text-royal-blue leading-tight">Ego & Sharon</span>
-                  <span className="font-doodle text-base font-bold text-royal-blue/70 leading-none">memories</span>
+                  <span className="font-doodle text-xs font-bold text-royal-blue/70 leading-none lowercase tracking-wide">
+                    {locale === "es" ? "el jardín" : "our garden"}
+                  </span>
                 </div>
                 <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 text-royal-blue">
                   <path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="8" />
@@ -589,34 +633,72 @@ export default function Home() {
               </div>
 
               {/* Garden Grid — doodles inspired by reference image 4 */}
-              <div className="flex-1 my-3 bg-white/50 border border-royal-blue/8 rounded-3xl p-4 relative overflow-hidden grid grid-cols-4 gap-3 items-center justify-items-center content-center">
-                {[
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M30,85 C28,60 15,45 10,40 C20,50 30,70 33,85" /><path d="M45,85 C45,55 35,35 25,30 C38,40 45,65 48,85" /></svg>, dur: 4.5, del: 0, span: 1 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-11 h-11"><path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="7" /><path d="M50,28 C50,18 58,25 54,30" /><path d="M56,35 C64,32 60,42 54,38" /><path d="M52,40 C54,48 46,45 48,40" /><path d="M47,38 C39,42 37,32 44,35" /><path d="M45,31 C40,24 48,20 50,28" /></svg>, dur: 5.2, del: 0.4, span: 2 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><ellipse cx="50" cy="50" rx="14" ry="9" /><path d="M44,42 Q45,50 44,58" /><path d="M50,41 Q51,50 50,59" /><path d="M45,41 Q38,25 50,41" /></svg>, dur: 3.2, del: 1, span: 1 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M30,55 C30,35 70,35 70,55 Z" /><path d="M45,55 C45,72 46,75 46,78 C54,78 55,72 55,55" /><circle cx="45" cy="46" r="3" /><circle cx="55" cy="49" r="2.5" /></svg>, dur: 4.8, del: 0.6, span: 1 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8"><path d="M50,85 C50,75 50,65 50,55" /><circle cx="50" cy="45" r="8" /><path d="M50,37 C50,30 55,34 53,38" /><path d="M55,45 C62,45 58,48 55,47" /><path d="M50,53 C50,60 45,56 47,52" /><path d="M45,45 C38,45 42,42 45,43" /></svg>, dur: 4.6, del: 0.2, span: 1 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M58,85 C60,50 70,30 80,25 C70,40 62,65 60,85" /><path d="M72,85 C75,65 85,55 90,50 C82,60 76,75 74,85" /></svg>, dur: 4.1, del: 1.4, span: 1 },
-                  { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 scale-x-[-1]"><ellipse cx="50" cy="50" rx="14" ry="9" /><path d="M44,42 Q45,50 44,58" /><path d="M50,41 Q51,50 50,59" /><path d="M45,41 Q38,25 50,41" /></svg>, dur: 3.6, del: 0.8, span: 1 },
-                ].map((item, i) => (
-                  <motion.div key={i}
-                    animate={{ rotate: i % 2 === 0 ? [-2, 2, -2] : [1, -2, 1], y: [0, -2, 0] }}
-                    transition={{ repeat: Infinity, duration: item.dur, delay: item.del, ease: "easeInOut" }}
-                    whileHover={{ scale: 1.18 }} whileTap={{ scale: 0.92 }}
-                    className={`text-royal-blue cursor-pointer ${item.span === 2 ? "col-span-2" : ""}`}
-                  >{item.el}</motion.div>
-                ))}
-                {/* Add button */}
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
-                  className="col-span-4 mt-1 w-11 h-11 rounded-full border-2 border-dashed border-royal-blue/30 hover:border-royal-blue/60 flex items-center justify-center text-royal-blue/45 hover:text-royal-blue cursor-pointer transition-colors"
+              <div className="flex-1 my-3 bg-white/60 border-2 border-royal-blue/15 rounded-3xl p-4 relative overflow-hidden flex flex-col justify-between">
+
+                {/* Floating garden clouds */}
+                <div className="absolute top-2 left-0 right-0 h-6 overflow-hidden pointer-events-none opacity-40">
+                  <motion.svg
+                    animate={{ x: [-20, 120, -20] }}
+                    transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+                    viewBox="0 0 100 50"
+                    className="w-10 h-6 text-royal-blue/40 absolute left-2"
+                  >
+                    <path d="M10,35 C10,20 30,10 45,20 C55,10 75,15 80,30 C90,30 95,40 80,45 L20,45 Z" fill="none" stroke="currentColor" strokeWidth="4" />
+                  </motion.svg>
+                  <motion.svg
+                    animate={{ x: [120, -20, 120] }}
+                    transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                    viewBox="0 0 100 50"
+                    className="w-8 h-5 text-royal-blue/40 absolute right-4 top-1"
+                  >
+                    <path d="M10,35 C10,20 30,10 45,20 C55,10 75,15 80,30 C90,30 95,40 80,45 L20,45 Z" fill="none" stroke="currentColor" strokeWidth="4" />
+                  </motion.svg>
+                </div>
+
+                {/* Grass ground lines at the bottom */}
+                <div className="absolute bottom-0 left-0 right-0 h-10 pointer-events-none text-royal-blue/20 flex items-end">
+                  <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full fill-none stroke-current" strokeWidth="2.5">
+                    <path d="M0,20 C10,12 15,18 20,20 C30,15 35,18 40,20 C50,12 55,15 60,20 C70,14 75,18 80,20 C90,12 95,15 100,20" />
+                  </svg>
+                </div>
+
+                {/* The organic garden composition */}
+                <div className="grid grid-cols-4 gap-3 items-center justify-items-center content-center flex-1 z-10 pt-4">
+                  {[
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M30,85 C28,60 15,45 10,40 C20,50 30,70 33,85" /><path d="M45,85 C45,55 35,35 25,30 C38,40 45,65 48,85" /></svg>, dur: 4.5, del: 0, span: 1 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-11 h-11"><path d="M50,85 C51,70 49,55 50,45" /><circle cx="50" cy="35" r="7" /><path d="M50,28 C50,18 58,25 54,30" /><path d="M56,35 C64,32 60,42 54,38" /><path d="M52,40 C54,48 46,45 48,40" /><path d="M47,38 C39,42 37,32 44,35" /><path d="M45,31 C40,24 48,20 50,28" /></svg>, dur: 5.2, del: 0.4, span: 2 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><ellipse cx="50" cy="50" rx="14" ry="9" /><path d="M44,42 Q45,50 44,58" /><path d="M50,41 Q51,50 50,59" /><path d="M45,41 Q38,25 50,41" /></svg>, dur: 3.2, del: 1, span: 1 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M30,55 C30,35 70,35 70,55 Z" /><path d="M45,55 C45,72 46,75 46,78 C54,78 55,72 55,55" /><circle cx="45" cy="46" r="3" /><circle cx="55" cy="49" r="2.5" /></svg>, dur: 4.8, del: 0.6, span: 1 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8"><path d="M50,85 C50,75 50,65 50,55" /><circle cx="50" cy="45" r="8" /><path d="M50,37 C50,30 55,34 53,38" /><path d="M55,45 C62,45 58,48 55,47" /><path d="M50,53 C50,60 45,56 47,52" /><path d="M45,45 C38,45 42,42 45,43" /></svg>, dur: 4.6, del: 0.2, span: 1 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M58,85 C60,50 70,30 80,25 C70,40 62,65 60,85" /><path d="M72,85 C75,65 85,55 90,50 C82,60 76,75 74,85" /></svg>, dur: 4.1, del: 1.4, span: 1 },
+                    { el: <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 scale-x-[-1]"><ellipse cx="50" cy="50" rx="14" ry="9" /><path d="M44,42 Q45,50 44,58" /><path d="M50,41 Q51,50 50,59" /><path d="M45,41 Q38,25 50,41" /></svg>, dur: 3.6, del: 0.8, span: 1 },
+                  ].map((item, i) => (
+                    <motion.div key={i}
+                      animate={{ rotate: i % 2 === 0 ? [-2, 2, -2] : [1, -2, 1], y: [0, -2, 0] }}
+                      transition={{ repeat: Infinity, duration: item.dur, delay: item.del, ease: "easeInOut" }}
+                      whileHover={{ scale: 1.18 }} whileTap={{ scale: 0.92 }}
+                      className={`text-royal-blue cursor-pointer ${item.span === 2 ? "col-span-2" : ""}`}
+                    >{item.el}</motion.div>
+                  ))}
+                </div>
+
+                {/* Wooden Sign Post "Plantar / Plant" Add Button */}
+                <motion.div
+                  whileHover={{ scale: 1.06, rotate: [0, 1, -1, 0] }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full flex flex-col items-center cursor-pointer text-royal-blue z-10 select-none pb-1"
                 >
-                  <span className="text-xl font-bold leading-none">+</span>
+                  <div className="border-2 border-royal-blue px-3 py-1 rounded-xl bg-white font-bold text-xs shadow-sm flex items-center gap-1.5 hover:bg-royal-blue/5 transition-colors">
+                    <span className="text-sm font-bold">+</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider">{locale === "es" ? "Plantar" : "Plant"}</span>
+                  </div>
+                  <div className="w-1 h-2 bg-royal-blue" />
                 </motion.div>
               </div>
 
               {/* Bottom Nav */}
-              <div className="flex justify-around items-center border-t border-royal-blue/10 pt-3 pb-2 text-royal-blue/50 text-[10px] font-bold">
-                <span className="text-royal-blue underline decoration-2 underline-offset-4">{t("navMemories")}</span>
+              <div className="flex justify-around items-center border-t border-royal-blue/10 pt-3 pb-2 text-royal-blue/50 text-[10px] font-bold z-10">
+                <span className="text-royal-blue underline decoration-2 underline-offset-4">{locale === "es" ? "Jardín" : "Garden"}</span>
                 <span>{t("navDiary")}</span>
                 <span>{t("navSettings")}</span>
               </div>
@@ -734,6 +816,49 @@ export default function Home() {
           </a>
         </div>
       </footer>
+
+      {/* ── Global Custom Cursor Styles ── */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        @media (pointer: fine) {
+          .custom-cursor-active, .custom-cursor-active * {
+            cursor: none !important;
+          }
+        }
+      `}} />
+
+      {/* ── Custom Cursor Follower ── */}
+      {!isMobile && (
+        <motion.div
+          className="fixed pointer-events-none z-50 text-royal-blue shrink-0 mix-blend-multiply"
+          animate={{
+            x: mousePos.x - (isHovered ? 24 : 16),
+            y: mousePos.y - (isHovered ? 24 : 16),
+            scale: isHovered ? 1.5 : 1,
+            rotate: isHovered ? 45 : 0,
+          }}
+          transition={{ type: "spring", stiffness: 350, damping: 25, mass: 0.5 }}
+        >
+          {isHovered ? (
+            <svg width="48" height="48" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+              <path d="M50,85 C51,70 49,55 50,45" />
+              <circle cx="50" cy="35" r="8" className="fill-royal-blue/20" />
+              <path d="M50,27 C50,15 62,25 56,31" />
+              <path d="M58,35 C70,30 65,45 57,39" />
+              <path d="M54,41 C58,53 46,49 48,42" />
+              <path d="M46,39 C34,45 30,30 42,35" />
+              <path d="M44,31 C38,20 50,15 50,27" />
+            </svg>
+          ) : (
+            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+              <path d="M50,85 C50,60 50,45 50,35" />
+              <path d="M50,55 C35,45 30,30 50,35" />
+              <path d="M50,45 C65,35 70,20 50,25" />
+              <circle cx="50" cy="35" r="4.5" fill="currentColor" />
+            </svg>
+          )}
+        </motion.div>
+      )}
     </div>
   );
 }
