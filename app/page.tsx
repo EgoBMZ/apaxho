@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   InstagramIcon,
   TwitterIcon,
@@ -24,6 +25,48 @@ import {
   Sun2Icon,
 } from "react-doodle-icons";
 import { translations } from "./translations";
+
+/* ─── Custom Inline Hand-Drawn Icons for Globe and Social Links ─── */
+const DoodleGlobe = ({ size = 18 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+    <circle cx="50" cy="50" r="40" />
+    <path d="M10,50 Q50,65 90,50" />
+    <path d="M10,50 Q50,35 90,50" />
+    <path d="M50,10 Q65,50 50,90" />
+    <path d="M50,10 Q35,50 50,90" />
+  </svg>
+);
+
+const DoodleInstagram = ({ size = 28 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible animate-pulse">
+    <rect x="15" y="15" width="70" height="70" rx="20" />
+    <circle cx="50" cy="50" r="18" />
+    <circle cx="72" cy="28" r="5" fill="currentColor" />
+  </svg>
+);
+
+const DoodleGithub = ({ size = 28 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+    <path d="M50,10 C28,10 10,28 10,50 C10,68 22,83 38,88 C38,89 38,85 38,81 C27,83 25,76 25,76 C23,72 20,71 20,71 C17,69 20,69 20,69 C23,69 25,73 25,73 C28,77 32,76 34,75 C34,73 35,71 36,70 C27,69 18,65 18,50 C18,46 20,42 22,39 C22,38 20,34 22,29 C22,29 25,28 32,33 C35,32 38,32 41,32 C44,32 47,32 50,33 C57,28 60,29 60,29 C62,34 60,38 60,39 C62,42 64,46 64,50 C64,65 55,69 46,70 C47,71 48,74 48,78 C48,83 48,87 48,88 C64,83 76,68 76,50 C76,28 58,10 50,10 Z" />
+  </svg>
+);
+
+const DoodleLinkedin = ({ size = 28 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+    <rect x="15" y="15" width="70" height="70" rx="15" />
+    <line x1="35" y1="45" x2="35" y2="70" />
+    <circle cx="35" cy="33" r="5" fill="currentColor" />
+    <path d="M50,70 L50,55 C50,48 54,45 59,45 C64,45 67,48 67,55 L67,70" />
+    <line x1="50" y1="45" x2="50" y2="70" />
+  </svg>
+);
+
+const DoodleWeb = ({ size = 28 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" className="overflow-visible">
+    <path d="M15,45 L50,15 L85,45 M25,40 L25,85 L75,85 L75,40" />
+    <rect x="42" y="55" width="16" height="30" rx="3" />
+  </svg>
+);
 
 /* ─── Inline SVG doodles inspired by reference image 3 (bold sketch style) ─── */
 const DoodlePineapple = ({ size = 36 }: { size?: number }) => (
@@ -251,15 +294,22 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-6">
           {/* Logo */}
           <div className="flex items-center gap-3 shrink-0">
-            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-11 h-11 text-royal-blue">
-              <path d="M50,85 C51,70 49,55 50,45" />
-              <circle cx="50" cy="35" r="8" />
-              <path d="M50,27 C50,15 62,25 56,31" />
-              <path d="M58,35 C70,30 65,45 57,39" />
-              <path d="M54,41 C58,53 46,49 48,42" />
-              <path d="M46,39 C34,45 30,30 42,35" />
-              <path d="M44,31 C38,20 50,15 50,27" />
-            </svg>
+            <motion.div
+              animate={{ rotate: [0, 6, -6, 0] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+              whileHover={{ scale: 1.15, rotate: 12 }}
+              className="text-royal-blue cursor-pointer shrink-0"
+            >
+              <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="w-14 h-14">
+                <path d="M50,85 C51,70 49,55 50,45" />
+                <circle cx="50" cy="35" r="8" />
+                <path d="M50,27 C50,15 62,25 56,31" />
+                <path d="M58,35 C70,30 65,45 57,39" />
+                <path d="M54,41 C58,53 46,49 48,42" />
+                <path d="M46,39 C34,45 30,30 42,35" />
+                <path d="M44,31 C38,20 50,15 50,27" />
+              </svg>
+            </motion.div>
             <span className="font-doodle text-3xl font-bold tracking-tight text-royal-blue lowercase">apaxho</span>
           </div>
 
@@ -276,9 +326,9 @@ export default function Home() {
               whileTap={{ scale: 0.96 }}
               onClick={() => setLocale(locale === "es" ? "en" : "es")}
               title={locale === "es" ? "Switch to English" : "Cambiar a Español"}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-royal-blue border-2 border-royal-blue/25 hover:bg-royal-blue/8 hover:border-royal-blue/50 transition-all"
+              className="flex items-center gap-2.5 px-4.5 py-2.5 rounded-xl text-sm font-bold text-royal-blue border-2 border-royal-blue/25 hover:bg-royal-blue/8 hover:border-royal-blue/50 transition-all shadow-sm"
             >
-              <GlobeIcon className="w-4 h-4 shrink-0" />
+              <DoodleGlobe size={18} />
               <span>{locale.toUpperCase()}</span>
             </motion.button>
             <button className="text-sm font-bold text-royal-blue/70 hover:text-royal-blue hover:underline transition-colors">
@@ -307,9 +357,10 @@ export default function Home() {
           className="hidden lg:flex lg:col-span-1 flex-col gap-6 text-royal-blue/50 border-r border-royal-blue/10 pr-2 py-8"
         >
           {[
-            { href: "https://instagram.com/@egobmz", icon: <InstagramIcon className="w-7 h-7" />, label: "Instagram" },
-            { href: "https://twitter.com/@egobmz", icon: <TwitterIcon className="w-7 h-7" />, label: "X / Twitter" },
-            { href: "https://tiktok.com/@egobmz", icon: <TikTokIcon className="w-7 h-7" />, label: "TikTok" },
+            { href: "https://egobmz.vercel.app", icon: <DoodleWeb size={28} />, label: "Web Personal" },
+            { href: "https://www.linkedin.com/in/egobmz/", icon: <DoodleLinkedin size={28} />, label: "LinkedIn" },
+            { href: "https://github.com/EgoBMZ", icon: <DoodleGithub size={28} />, label: "GitHub" },
+            { href: "https://instagram.com/egobmz", icon: <DoodleInstagram size={28} />, label: "Instagram" },
           ].map(({ href, icon, label }) => (
             <motion.a
               key={label}
@@ -317,7 +368,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               title={label}
-              whileHover={{ scale: 1.2, x: 4 }}
+              whileHover={{ scale: 1.25, x: 5 }}
               className="p-2 rounded-xl hover:bg-royal-blue/8 hover:text-royal-blue w-fit transition-all"
             >
               {icon}
@@ -352,7 +403,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] text-royal-blue font-mono tracking-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.25] text-royal-blue font-mono tracking-tight pb-2"
           >
             {t("heroTitle")}
           </motion.h1>
@@ -656,12 +707,31 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="w-full max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-royal-blue/10 text-xs text-royal-blue/50 font-bold">
-        <span>© {new Date().getFullYear()} {t("footerMadeWith")}</span>
+      <footer className="w-full max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-royal-blue/10 text-xs text-royal-blue/50 font-bold relative z-20">
+        <div className="flex flex-col gap-2 items-center md:items-start">
+          <span>© {new Date().getFullYear()} {t("footerMadeWith")}</span>
+          {/* Mobile socials (visible on md and below, hidden on lg because sidebar has them) */}
+          <div className="flex gap-4 lg:hidden mt-1">
+            <a href="https://egobmz.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">Web</a>
+            <span>•</span>
+            <a href="https://www.linkedin.com/in/egobmz/" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">LinkedIn</a>
+            <span>•</span>
+            <a href="https://github.com/EgoBMZ" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">GitHub</a>
+            <span>•</span>
+            <a href="https://instagram.com/egobmz" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue transition-colors">Instagram</a>
+          </div>
+        </div>
+
         <div className="flex gap-6">
-          {(["footerPrivacy", "footerTerms", "footerContact"] as const).map((k) => (
-            <a key={k} href="#" className="hover:text-royal-blue hover:underline transition-colors">{t(k)}</a>
-          ))}
+          <Link href="/privacidad" className="hover:text-royal-blue hover:underline transition-colors">
+            {t("footerPrivacy")}
+          </Link>
+          <Link href="/terminos" className="hover:text-royal-blue hover:underline transition-colors">
+            {t("footerTerms")}
+          </Link>
+          <a href="https://egobmz.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-royal-blue hover:underline transition-colors">
+            {t("footerContact")}
+          </a>
         </div>
       </footer>
     </div>
