@@ -13,8 +13,25 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase for SSR compatibility (Next.js)
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Initialize Firebase for SSR compatibility (Next.js) with fallback mock configuration to prevent build crashes if env variables are not set yet
+let app;
+if (getApps().length === 0) {
+  if (firebaseConfig.apiKey) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    console.warn("Firebase API key missing. Initializing with mock config for build-time safety.");
+    app = initializeApp({
+      apiKey: "mock-api-key-for-build-time-safety",
+      authDomain: "mock-auth-domain",
+      projectId: "mock-project-id",
+      storageBucket: "mock-storage-bucket",
+      messagingSenderId: "mock-messaging-sender-id",
+      appId: "mock-app-id",
+    });
+  }
+} else {
+  app = getApp();
+}
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
