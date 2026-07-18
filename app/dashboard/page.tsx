@@ -748,7 +748,7 @@ export default function DashboardPage() {
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* LEFT COLUMN: Notes & Plant Form */}
-            <div className="lg:col-span-5 flex flex-col gap-6 w-full">
+            <div className="lg:col-span-5 flex flex-col gap-6 w-full order-2 lg:order-1">
               
               {/* Plant Cuddle Card */}
               <motion.div
@@ -1053,7 +1053,7 @@ export default function DashboardPage() {
             </div>
 
             {/* RIGHT COLUMN: Shared Garden canvas */}
-            <div className="lg:col-span-7 flex flex-col gap-4 w-full">
+            <div className="lg:col-span-7 flex flex-col gap-4 w-full order-1 lg:order-2">
               
               {/* Garden Header */}
               <div className={`border-2 rounded-3xl p-5 shadow-lg flex flex-col gap-3 relative transition-colors duration-300 ${
@@ -1187,7 +1187,7 @@ export default function DashboardPage() {
                             left: pos.left,
                             bottom: pos.bottom
                           }}
-                          className="origin-bottom transform -translate-x-1/2 pointer-events-auto cursor-help group text-[#1c0dcb]"
+                          className="origin-bottom transform -translate-x-1/2 pointer-events-auto cursor-help group text-[#1c0dcb] hover:z-50"
                         >
                           {/* Flower rendering */}
                           {note.colorTheme === "pink" && <PinkDaisy size={54} />}

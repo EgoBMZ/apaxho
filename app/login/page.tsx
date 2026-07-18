@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import { 
   signInWithEmailAndPassword, 
   signInWithPopup, 
-  GoogleAuthProvider, 
-  FacebookAuthProvider 
+  GoogleAuthProvider 
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -65,13 +64,11 @@ export default function LoginPage() {
     }
   };
 
-  const handleProviderLogin = async (providerName: "google" | "facebook") => {
+  const handleProviderLogin = async (providerName: "google") => {
     setError("");
     setLoading(true);
     try {
-      const provider = providerName === "google" 
-        ? new GoogleAuthProvider() 
-        : new FacebookAuthProvider();
+      const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
 
@@ -199,31 +196,18 @@ export default function LoginPage() {
         </div>
 
         {/* Social logins */}
-        <div className="grid grid-cols-2 gap-3.5">
+        <div>
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={loading}
             type="button"
             onClick={() => handleProviderLogin("google")}
-            className="flex items-center justify-center gap-2 border border-[#1c0dcb]/20 bg-white hover:bg-[#1c0dcb]/5 py-2.5 rounded-xl text-xs font-bold text-royal-blue transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 border border-[#1c0dcb]/20 bg-white hover:bg-[#1c0dcb]/5 py-2.5 rounded-xl text-xs font-bold text-royal-blue transition-colors disabled:opacity-50"
           >
             {/* Google Icon Doodle-style */}
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.99 5.99 0 0 1 8 12.527a5.99 5.99 0 0 1 5.99-5.99c1.47 0 2.8.528 3.84 1.51l3.062-3.062C18.99 3.125 16.63 2 13.99 2 8.16 2 3.44 6.72 3.44 12.55s4.72 10.55 10.55 10.55c5.99 0 10.24-4.215 10.24-10.236 0-.64-.075-1.125-.2-1.58H12.24Z"/></svg>
             Google
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={loading}
-            type="button"
-            onClick={() => handleProviderLogin("facebook")}
-            className="flex items-center justify-center gap-2 border border-[#1c0dcb]/20 bg-white hover:bg-[#1c0dcb]/5 py-2.5 rounded-xl text-xs font-bold text-royal-blue transition-colors disabled:opacity-50"
-          >
-            {/* Facebook Icon Doodle-style */}
-            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.8c4.56-.93 8-4.96 8-9.8Z"/></svg>
-            Facebook
           </motion.button>
         </div>
 
